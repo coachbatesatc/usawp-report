@@ -10,7 +10,7 @@
 body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f0f4f8;color:#2d3748;padding:12px 12px 60px}
 .wrap{max-width:640px;margin:0 auto}
 .hdr{background:#1a365d;border-radius:10px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px}
-.hdr-logo{background:#2b6cb0;border-radius:8px;padding:7px 11px;font-weight:900;font-size:17px;color:#fff}
+.logo{background:#2b6cb0;border-radius:8px;padding:7px 11px;font-weight:900;font-size:17px;color:#fff}
 .hdr h1{color:#fff;font-size:16px;font-weight:700;margin:0}
 .hdr p{color:#90cdf4;font-size:12px;margin:2px 0 0}
 .tabs{display:flex;gap:6px;margin-bottom:14px}
@@ -19,21 +19,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f0f4f8;
 .pg{display:none}.pg.on{display:block}
 .sh{background:#1a365d;color:#fff;padding:9px 12px;border-radius:6px;font-size:12px;font-weight:700;margin:10px 0 12px;letter-spacing:.05em;text-transform:uppercase}
 .f{margin-bottom:14px}
-.f lbl,label.lbl{display:block;font-size:12px;font-weight:600;color:#4a5568;margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
+.lbl{display:block;font-size:12px;font-weight:600;color:#4a5568;margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
 .req{color:#e53e3e}
 input[type=text],input[type=email],input[type=url],input[type=date],input[type=time],textarea{width:100%;padding:13px 12px;border:1.5px solid #cbd5e0;border-radius:8px;font-size:16px;background:#fff;color:#2d3748;font-family:inherit;-webkit-appearance:none;outline:none;display:block}
 input[readonly]{background:#f7fafc;color:#718096}
 textarea{resize:vertical;min-height:76px}
-.sb{width:100%;padding:13px 12px;border:1.5px solid #cbd5e0;border-radius:8px;font-size:16px;background:#fff;color:#a0aec0;text-align:left;display:flex;justify-content:space-between;align-items:center;font-family:inherit;cursor:pointer;-webkit-appearance:none}
+.sb{width:100%;padding:13px 12px;border:1.5px solid #cbd5e0;border-radius:8px;font-size:16px;background:#fff;color:#a0aec0;text-align:left;display:flex;justify-content:space-between;align-items:center;font-family:inherit;cursor:pointer}
 .sb.v{color:#2d3748;border-color:#2b6cb0}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.pills{display:flex;flex-wrap:wrap;gap:8px;min-height:44px}
-.pill{padding:10px 14px;border-radius:20px;border:1.5px solid #cbd5e0;font-size:14px;font-weight:600;background:#fff;color:#4a5568;cursor:pointer;font-family:inherit}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{padding:10px 14px;border-radius:20px;border:1.5px solid #cbd5e0;font-size:14px;font-weight:600;background:#fff;color:#4a5568;cursor:pointer;font-family:inherit;-webkit-appearance:none}
 .pill.on{border-color:#2b6cb0;background:#ebf8ff;color:#2b6cb0}
-.sv{width:100%;padding:13px;border-radius:8px;border:2px solid #cbd5e0;background:#fff;color:#4a5568;text-align:left;font-size:15px;font-weight:600;margin-bottom:8px;cursor:pointer;font-family:inherit}
-.sv.g{border-color:#276749;background:#f0fff4;color:#276749}
-.sv.a{border-color:#c05621;background:#fffaf0;color:#c05621}
-.sv.r{border-color:#c53030;background:#fff5f5;color:#c53030}
+.svbtn{width:100%;padding:13px;border-radius:8px;border:2px solid #cbd5e0;background:#fff;color:#4a5568;text-align:left;font-size:15px;font-weight:600;margin-bottom:8px;cursor:pointer;font-family:inherit}
+.svbtn.g{border-color:#276749;background:#f0fff4;color:#276749}
+.svbtn.a{border-color:#c05621;background:#fffaf0;color:#c05621}
+.svbtn.r{border-color:#c53030;background:#fff5f5;color:#c53030}
 .dbox{background:#ebf8ff;border:1px solid #90cdf4;border-radius:8px;padding:12px;margin-bottom:14px}
 .dbox h3{font-weight:700;color:#2b6cb0;font-size:14px;margin-bottom:10px}
 .mbox{background:#fffff0;border:1px solid #f6e05e;border-radius:8px;padding:12px;margin-bottom:14px;display:none}
@@ -58,7 +58,6 @@ pre.cb{background:#f7fafc;border:1px solid #e2e8f0;border-radius:7px;padding:12p
 .sn{min-width:28px;height:28px;border-radius:50%;background:#2b6cb0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
 .dc{border:1px solid #e2e8f0;border-radius:10px;padding:14px;background:#fff;margin-bottom:10px}
 .es{text-align:center;padding:40px 20px;color:#a0aec0;font-size:14px;border:2px dashed #e2e8f0;border-radius:10px}
-/* Picker */
 .po{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;display:none;align-items:flex-end;justify-content:center}
 .po.on{display:flex}
 .ps{background:#fff;border-radius:18px 18px 0 0;width:100%;max-width:640px;max-height:72vh;display:flex;flex-direction:column}
@@ -68,7 +67,6 @@ pre.cb{background:#f7fafc;border:1px solid #e2e8f0;border-radius:7px;padding:12p
 .pl{overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1}
 .pi{padding:18px 16px;font-size:17px;border-bottom:1px solid #f7fafc;display:flex;justify-content:space-between;align-items:center;color:#2d3748;cursor:pointer}
 .pi.on{color:#2b6cb0;font-weight:600;background:#f7fbff}
-/* Modal */
 .mo{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;display:none;align-items:center;justify-content:center;padding:16px}
 .mo.on{display:flex}
 .mc{background:#fff;border-radius:12px;padding:20px;max-width:480px;width:100%;max-height:85vh;display:flex;flex-direction:column}
@@ -82,14 +80,8 @@ pre.cb{background:#f7fafc;border:1px solid #e2e8f0;border-radius:7px;padding:12p
 <body>
 <div class="wrap">
 
-<div id="iosBanner" style="display:none;background:#1a365d;color:#fff;border-radius:10px;padding:14px;margin-bottom:14px">
-  <div style="font-weight:700;font-size:14px;margin-bottom:4px">📲 Add to Home Screen</div>
-  <div style="font-size:13px;color:#90cdf4;margin-bottom:8px">Tap Share (□↑) then "Add to Home Screen" for app-like access.</div>
-  <button onclick="this.parentElement.style.display='none'" style="background:none;border:1px solid #90cdf4;color:#90cdf4;border-radius:6px;padding:6px 14px;font-size:13px;cursor:pointer;font-family:inherit">Dismiss</button>
-</div>
-
 <div class="hdr">
-  <div class="hdr-logo">USAWP</div>
+  <div class="logo">USAWP</div>
   <div><h1>ATC Encounter Report</h1><p>Sports Medicine — Independent Contractor</p></div>
 </div>
 
@@ -99,7 +91,7 @@ pre.cb{background:#f7fafc;border:1px solid #e2e8f0;border-radius:7px;padding:12p
   <button class="tab" onclick="showPg('setup',this)">⚙️ Setup</button>
 </div>
 
-<!-- REPORT -->
+<!-- ═══ REPORT PAGE ═══ -->
 
 <div id="pg-report" class="pg on">
 <div id="doneView" style="display:none"></div>
@@ -107,80 +99,157 @@ pre.cb{background:#f7fafc;border:1px solid #e2e8f0;border-radius:7px;padding:12p
 
 <div class="dbox">
   <h3>🔗 Delivery Settings</h3>
-  <div class="f"><label class="lbl">Google Sheet Web App URL</label><input type="url" id="webAppUrl" placeholder="https://script.google.com/macros/s/…/exec"></div>
-  <div class="f" style="margin-bottom:0"><label class="lbl">Notification Email</label><input type="email" id="notifyEmail" placeholder="your@email.com"></div>
+  <div class="f"><span class="lbl">Google Sheet Web App URL</span><input type="url" id="webAppUrl" placeholder="https://script.google.com/macros/s/…/exec"></div>
+  <div class="f" style="margin-bottom:0"><span class="lbl">Notification Email</span><input type="email" id="notifyEmail" placeholder="your@email.com"></div>
 </div>
 
-<div class="sh">Event & Location</div>
+<div class="sh">Event &amp; Location</div>
 <div class="g2">
-  <div class="f"><label class="lbl">Event Type <span class="req">*</span></label><button type="button" class="sb" id="sb-eventType" onclick="op('eventType')"><span id="sv-eventType">Select…</span><span>▼</span></button><input type="hidden" id="eventType"></div>
-  <div class="f"><label class="lbl">Event Name</label><input type="text" id="eventName" placeholder="e.g. NL Wave 2"></div>
+  <div class="f">
+    <span class="lbl">Event Type <span class="req">*</span></span>
+    <button type="button" class="sb" id="sb-eventType" onclick="op('eventType')"><span id="sv-eventType">Select…</span><span>▼</span></button>
+    <input type="hidden" id="eventType">
+  </div>
+  <div class="f"><span class="lbl">Event Name</span><input type="text" id="eventName" placeholder="e.g. NL Wave 2"></div>
 </div>
-<div class="f"><label class="lbl">Pool Site / Venue <span class="req">*</span></label><input type="text" id="poolSite" placeholder="Facility name & city"></div>
+<div class="f"><span class="lbl">Pool Site / Venue <span class="req">*</span></span><input type="text" id="poolSite" placeholder="Facility name & city"></div>
 <div class="g2">
-  <div class="f"><label class="lbl">Date <span class="req">*</span></label><input type="date" id="encounterDate"></div>
-  <div class="f"><label class="lbl">Time <span class="req">*</span></label><input type="time" id="encounterTime"></div>
+  <div class="f"><span class="lbl">Date <span class="req">*</span></span><input type="date" id="encounterDate"></div>
+  <div class="f"><span class="lbl">Time <span class="req">*</span></span><input type="time" id="encounterTime"></div>
 </div>
 
 <div class="sh">Athlete Information</div>
-<div class="f"><label class="lbl">Athlete Name <span class="req">*</span></label><input type="text" id="athleteName" placeholder="Last, First"></div>
+<div class="f"><span class="lbl">Athlete Name <span class="req">*</span></span><input type="text" id="athleteName" placeholder="Last, First"></div>
 <div class="g2">
-  <div class="f"><label class="lbl">Date of Birth</label><input type="date" id="dob" oninput="updAge()"></div>
-  <div class="f"><label class="lbl">Age</label><input type="text" id="ageDisp" readonly></div>
-  <div class="f"><label class="lbl">Gender</label><button type="button" class="sb" id="sb-gender" onclick="op('gender')"><span id="sv-gender">Select…</span><span>▼</span></button><input type="hidden" id="gender"></div>
-  <div class="f"><label class="lbl">Team / Club</label><input type="text" id="teamClub" placeholder="Club or team"></div>
+  <div class="f"><span class="lbl">Date of Birth</span><input type="date" id="dob" oninput="updAge()"></div>
+  <div class="f"><span class="lbl">Age</span><input type="text" id="ageDisp" readonly></div>
+  <div class="f">
+    <span class="lbl">Gender</span>
+    <button type="button" class="sb" id="sb-gender" onclick="op('gender')"><span id="sv-gender">Select…</span><span>▼</span></button>
+    <input type="hidden" id="gender">
+  </div>
+  <div class="f"><span class="lbl">Team / Club</span><input type="text" id="teamClub" placeholder="Club or team"></div>
 </div>
-<div class="f"><label class="lbl">USAWP # (if known)</label><input type="text" id="usawpNum" placeholder="Optional"></div>
+<div class="f"><span class="lbl">USAWP # (if known)</span><input type="text" id="usawpNum" placeholder="Optional"></div>
 
 <div class="sh">Encounter Type</div>
-<div class="f"><label class="lbl">Reason for Encounter <span class="req">*</span></label><div class="pills" id="encPills"></div><input type="hidden" id="encounterType"></div>
-
-<div class="sh">Chief Complaint & History</div>
-<div class="g2">
-  <div class="f"><label class="lbl">Body Region</label><button type="button" class="sb" id="sb-bodyRegion" onclick="op('bodyRegion')"><span id="sv-bodyRegion">Select…</span><span>▼</span></button><input type="hidden" id="bodyRegion"></div>
-  <div class="f"><label class="lbl">Side</label><button type="button" class="sb" id="sb-side" onclick="op('side')"><span id="sv-side">Select…</span><span>▼</span></button><input type="hidden" id="side"></div>
-  <div class="f"><label class="lbl">Onset</label><button type="button" class="sb" id="sb-onset" onclick="op('onset')"><span id="sv-onset">Select…</span><span>▼</span></button><input type="hidden" id="onset"></div>
-  <div class="f"><label class="lbl">Mechanism</label><button type="button" class="sb" id="sb-mechanism" onclick="op('mechanism')"><span id="sv-mechanism">Select…</span><span>▼</span></button><input type="hidden" id="mechanism"></div>
+<div class="f">
+  <span class="lbl">Reason for Encounter <span class="req">*</span></span>
+  <div class="pills">
+    <button type="button" class="pill" onclick="selPill(this,'encounterType')">Injury</button>
+    <button type="button" class="pill" onclick="selPill(this,'encounterType')">Illness</button>
+    <button type="button" class="pill" onclick="selPill(this,'encounterType')">Treatment/Follow-up</button>
+    <button type="button" class="pill" onclick="selPill(this,'encounterType')">Consultation</button>
+    <button type="button" class="pill" onclick="selPill(this,'encounterType')">Wellness Check</button>
+    <button type="button" class="pill" onclick="selPill(this,'encounterType')">Other</button>
+  </div>
+  <input type="hidden" id="encounterType">
 </div>
-<div class="f"><label class="lbl">Subjective / History</label><textarea id="subjective" placeholder="Athlete's description, onset, relevant history…"></textarea></div>
+
+<div class="sh">Chief Complaint &amp; History</div>
+<div class="g2">
+  <div class="f">
+    <span class="lbl">Body Region</span>
+    <button type="button" class="sb" id="sb-bodyRegion" onclick="op('bodyRegion')"><span id="sv-bodyRegion">Select…</span><span>▼</span></button>
+    <input type="hidden" id="bodyRegion">
+  </div>
+  <div class="f">
+    <span class="lbl">Side</span>
+    <button type="button" class="sb" id="sb-side" onclick="op('side')"><span id="sv-side">Select…</span><span>▼</span></button>
+    <input type="hidden" id="side">
+  </div>
+  <div class="f">
+    <span class="lbl">Onset</span>
+    <button type="button" class="sb" id="sb-onset" onclick="op('onset')"><span id="sv-onset">Select…</span><span>▼</span></button>
+    <input type="hidden" id="onset">
+  </div>
+  <div class="f">
+    <span class="lbl">Mechanism</span>
+    <button type="button" class="sb" id="sb-mechanism" onclick="op('mechanism')"><span id="sv-mechanism">Select…</span><span>▼</span></button>
+    <input type="hidden" id="mechanism">
+  </div>
+</div>
+<div class="f"><span class="lbl">Subjective / History</span><textarea id="subjective" placeholder="Athlete's description, onset, relevant history…"></textarea></div>
 
 <div class="sh">Assessment</div>
-<div class="f"><label class="lbl">Working Assessment</label><input type="text" id="assessment" placeholder="e.g. Acute lateral ankle sprain, Grade I"></div>
-<div class="f"><label class="lbl">Severity Tier</label>
-  <button type="button" class="sv" id="sv-g" onclick="setSev('Green \u2013 Minor / Monitor','g')">Green – Minor / Monitor</button>
-  <button type="button" class="sv" id="sv-a" onclick="setSev('Amber \u2013 Moderate / Restricted','a')">Amber – Moderate / Restricted</button>
-  <button type="button" class="sv" id="sv-r" onclick="setSev('Red \u2013 Severe / Withheld','r')">Red – Severe / Withheld</button>
+<div class="f"><span class="lbl">Working Assessment</span><input type="text" id="assessment" placeholder="e.g. Acute lateral ankle sprain, Grade I"></div>
+<div class="f">
+  <span class="lbl">Severity Tier</span>
+  <button type="button" class="svbtn" id="svbtn-g" onclick="setSev('Green \u2013 Minor / Monitor','g')">Green – Minor / Monitor</button>
+  <button type="button" class="svbtn" id="svbtn-a" onclick="setSev('Amber \u2013 Moderate / Restricted','a')">Amber – Moderate / Restricted</button>
+  <button type="button" class="svbtn" id="svbtn-r" onclick="setSev('Red \u2013 Severe / Withheld','r')">Red – Severe / Withheld</button>
   <input type="hidden" id="severity">
 </div>
 
-<div class="sh">Treatment & Management</div>
-<div class="f"><label class="lbl">Treatment(s) Provided</label><div class="pills" id="txPills"></div></div>
-<div class="f"><label class="lbl">Treatment Notes</label><textarea id="treatmentNotes" placeholder="Techniques, parameters, clinical findings, response…"></textarea></div>
-
-<div class="sh">Disposition & Follow-Up</div>
-<div class="g2">
-  <div class="f"><label class="lbl">EMS Activated?</label><button type="button" class="sb" id="sb-emsActivated" onclick="op('emsActivated')"><span id="sv-emsActivated">Select…</span><span>▼</span></button><input type="hidden" id="emsActivated"></div>
-  <div class="f" id="emsDF" style="display:none"><label class="lbl">EMS Details</label><input type="text" id="emsDetails" placeholder="Agency, response time, outcome…"></div>
-  <div class="f"><label class="lbl">Referral Made?</label><button type="button" class="sb" id="sb-referralMade" onclick="op('referralMade')"><span id="sv-referralMade">Select…</span><span>▼</span></button><input type="hidden" id="referralMade"></div>
-  <div class="f" id="refDF" style="display:none"><label class="lbl">Referred To</label><input type="text" id="referralTo" placeholder="e.g. ED, orthopedist, PCP…"></div>
+<div class="sh">Treatment &amp; Management</div>
+<div class="f">
+  <span class="lbl">Treatment(s) Provided</span>
+  <div class="pills" id="txPills">
+    <button type="button" class="pill" onclick="togTx(this)">First Aid</button>
+    <button type="button" class="pill" onclick="togTx(this)">Manual Therapy</button>
+    <button type="button" class="pill" onclick="togTx(this)">Taping</button>
+    <button type="button" class="pill" onclick="togTx(this)">Bracing</button>
+    <button type="button" class="pill" onclick="togTx(this)">Splinting</button>
+    <button type="button" class="pill" onclick="togTx(this)">Modality</button>
+    <button type="button" class="pill" onclick="togTx(this)">Ice/Cryotherapy</button>
+    <button type="button" class="pill" onclick="togTx(this)">Heat</button>
+    <button type="button" class="pill" onclick="togTx(this)">Wound Care</button>
+    <button type="button" class="pill" onclick="togTx(this)">Consultation</button>
+    <button type="button" class="pill" onclick="togTx(this)">Education/Counseling</button>
+    <button type="button" class="pill" onclick="togTx(this)">No Treatment Required</button>
+    <button type="button" class="pill" onclick="togTx(this)">Other</button>
+  </div>
 </div>
-<div class="f"><label class="lbl">Return to Play Status</label><button type="button" class="sb" id="sb-rtpStatus" onclick="op('rtpStatus')"><span id="sv-rtpStatus">Select…</span><span>▼</span></button><input type="hidden" id="rtpStatus"></div>
+<div class="f"><span class="lbl">Treatment Notes</span><textarea id="treatmentNotes" placeholder="Techniques, parameters, clinical findings, response…"></textarea></div>
+
+<div class="sh">Disposition &amp; Follow-Up</div>
+<div class="g2">
+  <div class="f">
+    <span class="lbl">EMS Activated?</span>
+    <button type="button" class="sb" id="sb-emsActivated" onclick="op('emsActivated')"><span id="sv-emsActivated">Select…</span><span>▼</span></button>
+    <input type="hidden" id="emsActivated">
+  </div>
+  <div class="f" id="emsDF" style="display:none"><span class="lbl">EMS Details</span><input type="text" id="emsDetails" placeholder="Agency, response time, outcome…"></div>
+  <div class="f">
+    <span class="lbl">Referral Made?</span>
+    <button type="button" class="sb" id="sb-referralMade" onclick="op('referralMade')"><span id="sv-referralMade">Select…</span><span>▼</span></button>
+    <input type="hidden" id="referralMade">
+  </div>
+  <div class="f" id="refDF" style="display:none"><span class="lbl">Referred To</span><input type="text" id="referralTo" placeholder="e.g. ED, orthopedist, PCP…"></div>
+</div>
+<div class="f">
+  <span class="lbl">Return to Play Status</span>
+  <button type="button" class="sb" id="sb-rtpStatus" onclick="op('rtpStatus')"><span id="sv-rtpStatus">Select…</span><span>▼</span></button>
+  <input type="hidden" id="rtpStatus">
+</div>
 
 <div class="mbox" id="minorBox">
   <h3>⚠️ Minor Athlete — Notification Required</h3>
   <div class="g2">
-    <div class="f"><label class="lbl">Parent/Guardian Contacted?</label><button type="button" class="sb" id="sb-parentContacted" onclick="op('parentContacted')"><span id="sv-parentContacted">Select…</span><span>▼</span></button><input type="hidden" id="parentContacted"></div>
-    <div class="f"><label class="lbl">Coach Contacted?</label><button type="button" class="sb" id="sb-coachContacted" onclick="op('coachContacted')"><span id="sv-coachContacted">Select…</span><span>▼</span></button><input type="hidden" id="coachContacted"></div>
+    <div class="f">
+      <span class="lbl">Parent/Guardian Contacted?</span>
+      <button type="button" class="sb" id="sb-parentContacted" onclick="op('parentContacted')"><span id="sv-parentContacted">Select…</span><span>▼</span></button>
+      <input type="hidden" id="parentContacted">
+    </div>
+    <div class="f">
+      <span class="lbl">Coach Contacted?</span>
+      <button type="button" class="sb" id="sb-coachContacted" onclick="op('coachContacted')"><span id="sv-coachContacted">Select…</span><span>▼</span></button>
+      <input type="hidden" id="coachContacted">
+    </div>
   </div>
 </div>
-<div class="f" id="coachAdult"><label class="lbl">Coach Contacted?</label><button type="button" class="sb" id="sb-coachAdult" onclick="op('coachAdult')"><span id="sv-coachAdult">Select…</span><span>▼</span></button><input type="hidden" id="coachAdult"></div>
+<div class="f" id="coachAdultRow">
+  <span class="lbl">Coach Contacted?</span>
+  <button type="button" class="sb" id="sb-coachAdult" onclick="op('coachAdult')"><span id="sv-coachAdult">Select…</span><span>▼</span></button>
+  <input type="hidden" id="coachAdult">
+</div>
 
-<div class="f"><label class="lbl">Additional Notes</label><textarea id="additionalNotes" placeholder="Follow-up plan, observations…"></textarea></div>
+<div class="f"><span class="lbl">Additional Notes</span><textarea id="additionalNotes" placeholder="Follow-up plan, observations…"></textarea></div>
 
 <div class="sh">ATC Information</div>
 <div class="g2">
-  <div class="f"><label class="lbl">ATC Name <span class="req">*</span></label><input type="text" id="atcName" placeholder="First Last"></div>
-  <div class="f"><label class="lbl">Credentials</label><input type="text" id="atcCredentials" placeholder="ATC, CSCS, LAT…"></div>
+  <div class="f"><span class="lbl">ATC Name <span class="req">*</span></span><input type="text" id="atcName" placeholder="First Last"></div>
+  <div class="f"><span class="lbl">Credentials</span><input type="text" id="atcCredentials" placeholder="ATC, CSCS, LAT…"></div>
 </div>
 
 <div class="ae" id="formErr"></div>
@@ -189,10 +258,10 @@ pre.cb{background:#f7fafc;border:1px solid #e2e8f0;border-radius:7px;padding:12p
   <button type="button" class="btn bo" onclick="saveDraft()">💾 Save Draft</button>
   <button type="button" class="btn bp" onclick="submitForm()">Submit Report →</button>
 </div>
-</div><!-- /mainForm -->
-</div><!-- /pg-report -->
+</div>
+</div>
 
-<!-- DRAFTS -->
+<!-- ═══ DRAFTS PAGE ═══ -->
 
 <div id="pg-drafts" class="pg">
   <div style="background:#1a365d;border-radius:8px;padding:12px;margin-bottom:14px">
@@ -205,14 +274,21 @@ pre.cb{background:#f7fafc;border:1px solid #e2e8f0;border-radius:7px;padding:12p
   <div id="draftList"></div>
 </div>
 
-<!-- SETUP -->
+<!-- ═══ SETUP PAGE ═══ -->
 
 <div id="pg-setup" class="pg">
   <div style="background:#1a365d;border-radius:8px;padding:12px;margin-bottom:14px">
     <div style="color:#fff;font-weight:700;font-size:15px">Google Sheet Setup</div>
     <div style="color:#90cdf4;font-size:12px;margin-top:2px">One-time setup — about 5 minutes</div>
   </div>
-  <div id="setupContent"></div>
+  <div class="step"><div class="sn">1</div><div><div style="font-weight:700;font-size:14px;color:#1a365d;margin-bottom:2px">Create a Google Sheet</div><div style="font-size:13px;color:#4a5568;line-height:1.5">Go to sheets.google.com, create a new spreadsheet, name it "USAWP Encounter Reports."</div></div></div>
+  <div class="step"><div class="sn">2</div><div><div style="font-weight:700;font-size:14px;color:#1a365d;margin-bottom:2px">Open Apps Script</div><div style="font-size:13px;color:#4a5568;line-height:1.5">In the sheet click Extensions → Apps Script.</div></div></div>
+  <div class="step"><div class="sn">3</div><div><div style="font-weight:700;font-size:14px;color:#1a365d;margin-bottom:2px">Paste the Script</div><div style="font-size:13px;color:#4a5568;line-height:1.5">Delete any existing code and paste the script below.</div></div></div>
+  <div class="step"><div class="sn">4</div><div><div style="font-weight:700;font-size:14px;color:#1a365d;margin-bottom:2px">Save</div><div style="font-size:13px;color:#4a5568;line-height:1.5">Press Ctrl/Cmd+S. Name it "USAWP Report Logger."</div></div></div>
+  <div class="step"><div class="sn">5</div><div><div style="font-weight:700;font-size:14px;color:#1a365d;margin-bottom:2px">Deploy as Web App</div><div style="font-size:13px;color:#4a5568;line-height:1.5">Click Deploy → New deployment. Type: Web App. Execute as: Me. Who has access: Anyone. Click Deploy.</div></div></div>
+  <div class="step"><div class="sn">6</div><div><div style="font-weight:700;font-size:14px;color:#1a365d;margin-bottom:2px">Authorize</div><div style="font-size:13px;color:#4a5568;line-height:1.5">Click Authorize access, sign in, allow permissions.</div></div></div>
+  <div class="step"><div class="sn">7</div><div><div style="font-weight:700;font-size:14px;color:#1a365d;margin-bottom:2px">Copy the Web App URL</div><div style="font-size:13px;color:#4a5568;line-height:1.5">Copy the URL shown (ends in /exec).</div></div></div>
+  <div class="step"><div class="sn">8</div><div><div style="font-weight:700;font-size:14px;color:#1a365d;margin-bottom:2px">Paste URL in Delivery Settings</div><div style="font-size:13px;color:#4a5568;line-height:1.5">Paste it into the Delivery Settings field on the Report tab. You can also paste it below.</div></div></div>
   <div class="cdb">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
       <span style="color:#90cdf4;font-size:12px;font-weight:700">APPS SCRIPT CODE</span>
@@ -269,96 +345,27 @@ pre.cb{background:#f7fafc;border:1px solid #e2e8f0;border-radius:7px;padding:12p
 
 <script>
 var PK = {
-  eventType:     {t:"Event Type",     o:["National League","NTSC Camp","ODP Event","Pipeline Event","Training Camp","Tournament","Other"]},
-  gender:        {t:"Gender",         o:["Male","Female","Non-binary","Prefer not to say"]},
-  bodyRegion:    {t:"Body Region",    o:["Head/Face","Neck","Shoulder","Upper Arm","Elbow","Forearm","Wrist","Hand/Finger","Chest/Thorax","Abdomen","Upper Back","Lower Back","Hip/Groin","Thigh","Knee","Lower Leg","Ankle","Foot/Toe","Multiple","N/A"]},
-  side:          {t:"Side",           o:["Left","Right","Bilateral","N/A"]},
-  onset:         {t:"Onset",          o:["Acute","Chronic","Acute-on-Chronic","N/A"]},
-  mechanism:     {t:"Mechanism",      o:["Contact","Non-contact","Overuse/Repetitive","Environmental","Unknown","N/A"]},
-  emsActivated:  {t:"EMS Activated?", o:["No","Yes"]},
-  referralMade:  {t:"Referral Made?", o:["No","Yes"]},
-  rtpStatus:     {t:"Return to Play", o:["Full Return to Play","Return with Modification","Withheld from Activity","Referred \u2013 Did Not Return","To Be Determined"]},
+  eventType:      {t:"Event Type",      o:["National League","NTSC Camp","ODP Event","Pipeline Event","Training Camp","Tournament","Other"]},
+  gender:         {t:"Gender",          o:["Male","Female","Non-binary","Prefer not to say"]},
+  bodyRegion:     {t:"Body Region",     o:["Head/Face","Neck","Shoulder","Upper Arm","Elbow","Forearm","Wrist","Hand/Finger","Chest/Thorax","Abdomen","Upper Back","Lower Back","Hip/Groin","Thigh","Knee","Lower Leg","Ankle","Foot/Toe","Multiple","N/A"]},
+  side:           {t:"Side",            o:["Left","Right","Bilateral","N/A"]},
+  onset:          {t:"Onset",           o:["Acute","Chronic","Acute-on-Chronic","N/A"]},
+  mechanism:      {t:"Mechanism",       o:["Contact","Non-contact","Overuse/Repetitive","Environmental","Unknown","N/A"]},
+  emsActivated:   {t:"EMS Activated?",  o:["No","Yes"]},
+  referralMade:   {t:"Referral Made?",  o:["No","Yes"]},
+  rtpStatus:      {t:"Return to Play",  o:["Full Return to Play","Return with Modification","Withheld from Activity","Referred \u2013 Did Not Return","To Be Determined"]},
   parentContacted:{t:"Parent/Guardian Contacted?",o:["Yes","No \u2013 Unable to reach","No \u2013 Not indicated"]},
-  coachContacted:{t:"Coach Contacted?",o:["Yes","No"]},
-  coachAdult:    {t:"Coach Contacted?",o:["Yes","No"]}
+  coachContacted: {t:"Coach Contacted?",o:["Yes","No"]},
+  coachAdult:     {t:"Coach Contacted?",o:["Yes","No"]}
 };
-var ENC = ["Injury","Illness","Treatment/Follow-up","Consultation","Wellness Check","Other"];
-var TX  = ["First Aid","Manual Therapy","Taping","Bracing","Splinting","Modality","Ice/Cryotherapy","Heat","Wound Care","Consultation","Education/Counseling","No Treatment Required","Other"];
-var DK  = "usawp_v6";
+
+var DK = "usawp_v7";
 var selTx = [];
-var curPicker = null;
 
-var SCRIPT = 'function doGet(e){\n  try{\n    var s=SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();\n    var p=e.parameter;\n    if(!p.athleteName){if(s.getLastRow()===0)wh(s);return r("ping");}\n    if(s.getLastRow()===0)wh(s);\n    s.appendRow([p.timestamp||"",p.eventType||"",p.eventName||"",p.poolSite||"",p.encounterDate||"",p.encounterTime||"",p.athleteName||"",p.dob||"",p.age||"",p.gender||"",p.teamClub||"",p.usawpNum||"",p.encounterType||"",p.bodyRegion||"",p.side||"",p.mechanism||"",p.onset||"",p.subjective||"",p.assessment||"",p.severity||"",p.treatments||"",p.treatmentNotes||"",p.emsActivated||"",p.emsDetails||"",p.referralMade||"",p.referralTo||"",p.rtpStatus||"",p.parentContacted||"",p.coachContacted||"",p.additionalNotes||"",p.atcName||"",p.atcCredentials||""]);\n    return r("success");\n  }catch(e){return r("error:"+e.toString());}\n}\nfunction wh(s){s.appendRow(["Timestamp","Event Type","Event Name","Pool Site","Encounter Date","Encounter Time","Athlete Name","DOB","Age","Gender","Team/Club","USAWP #","Encounter Type","Body Region","Side","Mechanism","Onset","Subjective","Assessment","Severity","Treatments","Treatment Notes","EMS Activated","EMS Details","Referral Made","Referred To","RTP Status","Parent Contacted","Coach Contacted","Additional Notes","ATC Name","ATC Credentials"]);}\nfunction r(m){return ContentService.createTextOutput(JSON.stringify({result:m})).setMimeType(ContentService.MimeType.JSON);}';
+var SCRIPT = 'function doGet(e){\n  try{\n    var s=SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();\n    var p=e.parameter;\n    if(!p.athleteName){if(s.getLastRow()===0)wh(s);return r("ping");}\n    if(s.getLastRow()===0)wh(s);\n    s.appendRow([p.timestamp||"",p.eventType||"",p.eventName||"",p.poolSite||"",p.encounterDate||"",p.encounterTime||"",p.athleteName||"",p.dob||"",p.age||"",p.gender||"",p.teamClub||"",p.usawpNum||"",p.encounterType||"",p.bodyRegion||"",p.side||"",p.mechanism||"",p.onset||"",p.subjective||"",p.assessment||"",p.severity||"",p.treatments||"",p.treatmentNotes||"",p.emsActivated||"",p.emsDetails||"",p.referralMade||"",p.referralTo||"",p.rtpStatus||"",p.parentContacted||"",p.coachContacted||"",p.additionalNotes||"",p.atcName||"",p.atcCredentials||""]);\n    return r("success");\n  }catch(err){return r("error:"+err.toString());}\n}\nfunction wh(s){s.appendRow(["Timestamp","Event Type","Event Name","Pool Site","Encounter Date","Encounter Time","Athlete Name","DOB","Age","Gender","Team/Club","USAWP #","Encounter Type","Body Region","Side","Mechanism","Onset","Subjective","Assessment","Severity","Treatments","Treatment Notes","EMS Activated","EMS Details","Referral Made","Referred To","RTP Status","Parent Contacted","Coach Contacted","Additional Notes","ATC Name","ATC Credentials"]);}\nfunction r(m){return ContentService.createTextOutput(JSON.stringify({result:m})).setMimeType(ContentService.MimeType.JSON);}';
 
-// Build pills
-function mkPills(cid, opts, hid, multi) {
-  var c = document.getElementById(cid);
-  opts.forEach(function(o) {
-    var b = document.createElement('button');
-    b.type = 'button'; b.className = 'pill'; b.textContent = o;
-    b.onclick = function() {
-      if (multi) {
-        b.classList.toggle('on');
-        var i = selTx.indexOf(o);
-        if (i > -1) selTx.splice(i,1); else selTx.push(o);
-      } else {
-        c.querySelectorAll('.pill').forEach(function(x){x.classList.remove('on');});
-        b.classList.add('on');
-        document.getElementById(hid).value = o;
-      }
-    };
-    c.appendChild(b);
-  });
-}
-
-// Picker
-function op(fid) {
-  var cfg = PK[fid]; if (!cfg) return;
-  curPicker = fid;
-  document.getElementById('pickerTitle').textContent = cfg.t;
-  var cur = document.getElementById(fid) ? document.getElementById(fid).value : '';
-  var pl = document.getElementById('pickerList'); pl.innerHTML = '';
-  cfg.o.forEach(function(o) {
-    var d = document.createElement('div');
-    d.className = 'pi' + (o===cur?' on':'');
-    d.innerHTML = '<span>'+e(o)+'</span>'+(o===cur?'<span style="color:#2b6cb0">✓</span>':'');
-    d.onclick = function() { sp(fid, o); };
-    pl.appendChild(d);
-  });
-  document.getElementById('pickerOv').classList.add('on');
-  document.body.style.overflow = 'hidden';
-  setTimeout(function(){var s=pl.querySelector('.on');if(s)s.scrollIntoView({block:'center'});},50);
-}
-function sp(fid, val) {
-  var el = document.getElementById(fid); if (el) el.value = val;
-  var sv = document.getElementById('sv-'+fid); if (sv) sv.textContent = val;
-  var sb = document.getElementById('sb-'+fid); if (sb) { sb.classList.add('v'); }
-  if (fid==='emsActivated') document.getElementById('emsDF').style.display = val==='Yes'?'block':'none';
-  if (fid==='referralMade') document.getElementById('refDF').style.display = val==='Yes'?'block':'none';
-  cp();
-}
-function cp() { document.getElementById('pickerOv').classList.remove('on'); document.body.style.overflow=''; curPicker=null; }
-
-// Severity
-function setSev(label, cls) {
-  ['g','a','r'].forEach(function(c){ document.getElementById('sv-'+c).className='sv'; });
-  document.getElementById('sv-'+cls).classList.add(cls);
-  document.getElementById('severity').value = label;
-}
-
-// Age
-function updAge() {
-  var dob = document.getElementById('dob').value;
-  var age = null;
-  if (dob) {
-    var b=new Date(dob),t=new Date(),a=t.getFullYear()-b.getFullYear();
-    if(t.getMonth()-b.getMonth()<0||(t.getMonth()===b.getMonth()&&t.getDate()<b.getDate()))a--;
-    if(a>=0)age=a;
-  }
-  document.getElementById('ageDisp').value = age!==null ? age+' yrs'+(age<18?' \u2014 MINOR':'') : '';
-  document.getElementById('minorBox').style.display = (age!==null&&age<18)?'block':'none';
-  document.getElementById('coachAdult').style.display = (age!==null&&age<18)?'none':'block';
-}
+document.getElementById('scriptPre').textContent = SCRIPT;
+renderDrafts();
 
 // Tabs
 function showPg(name, btn) {
@@ -369,7 +376,71 @@ function showPg(name, btn) {
   if (name==='drafts') renderDrafts();
 }
 
-// Collect
+// Pills — single select
+function selPill(btn, hiddenId) {
+  var group = btn.parentElement;
+  group.querySelectorAll('.pill').forEach(function(p){p.classList.remove('on');});
+  btn.classList.add('on');
+  document.getElementById(hiddenId).value = btn.textContent;
+}
+
+// Pills — multi select (treatments)
+function togTx(btn) {
+  btn.classList.toggle('on');
+  var txt = btn.textContent;
+  var i = selTx.indexOf(txt);
+  if (i > -1) selTx.splice(i,1); else selTx.push(txt);
+}
+
+// Severity
+function setSev(label, cls) {
+  ['g','a','r'].forEach(function(c){document.getElementById('svbtn-'+c).className='svbtn';});
+  document.getElementById('svbtn-'+cls).classList.add(cls);
+  document.getElementById('severity').value = label;
+}
+
+// Picker
+function op(fid) {
+  var cfg = PK[fid]; if (!cfg) return;
+  document.getElementById('pickerTitle').textContent = cfg.t;
+  var cur = document.getElementById(fid) ? document.getElementById(fid).value : '';
+  var pl = document.getElementById('pickerList'); pl.innerHTML = '';
+  cfg.o.forEach(function(o) {
+    var d = document.createElement('div');
+    d.className = 'pi'+(o===cur?' on':'');
+    d.innerHTML = '<span>'+e(o)+'</span>'+(o===cur?'<span style="color:#2b6cb0">✓</span>':'');
+    d.onclick = function(){ sp(fid, o); };
+    pl.appendChild(d);
+  });
+  document.getElementById('pickerOv').classList.add('on');
+  document.body.style.overflow = 'hidden';
+  setTimeout(function(){var s=pl.querySelector('.on');if(s)s.scrollIntoView({block:'center'});},50);
+}
+function sp(fid, val) {
+  var el = document.getElementById(fid); if (el) el.value = val;
+  var sv = document.getElementById('sv-'+fid); if (sv) sv.textContent = val;
+  var sb = document.getElementById('sb-'+fid); if (sb) sb.classList.add('v');
+  if (fid==='emsActivated') document.getElementById('emsDF').style.display = val==='Yes'?'block':'none';
+  if (fid==='referralMade') document.getElementById('refDF').style.display = val==='Yes'?'block':'none';
+  cp();
+}
+function cp() { document.getElementById('pickerOv').classList.remove('on'); document.body.style.overflow=''; }
+
+// Age
+function updAge() {
+  var dob = document.getElementById('dob').value;
+  var age = null;
+  if (dob) {
+    var b=new Date(dob),t=new Date(),a=t.getFullYear()-b.getFullYear();
+    if(t.getMonth()-b.getMonth()<0||(t.getMonth()===b.getMonth()&&t.getDate()<b.getDate()))a--;
+    if(a>=0) age=a;
+  }
+  document.getElementById('ageDisp').value = age!==null ? age+' yrs'+(age<18?' \u2014 MINOR':'') : '';
+  document.getElementById('minorBox').style.display = (age!==null&&age<18)?'block':'none';
+  document.getElementById('coachAdultRow').style.display = (age!==null&&age<18)?'none':'block';
+}
+
+// Collect form values
 function gv(id){var el=document.getElementById(id);return el?el.value:'';}
 function collect() {
   var dob=gv('dob'),age=null;
@@ -394,23 +465,24 @@ function collect() {
   };
 }
 
-function validate(f) {
+function validate(f){
   return ['eventType','poolSite','encounterDate','encounterTime','athleteName','encounterType','atcName'].every(function(k){return f[k]&&f[k].trim();});
 }
 
 // Submit
 function submitForm() {
-  var f = collect();
-  var errEl = document.getElementById('formErr');
-  if (!validate(f)) { errEl.textContent='⚠️ Please fill in all required fields (marked *).'; errEl.style.display='block'; errEl.scrollIntoView({behavior:'smooth',block:'center'}); return; }
+  var f=collect();
+  var errEl=document.getElementById('formErr');
+  if(!validate(f)){errEl.textContent='⚠️ Please fill in all required fields (marked *).';errEl.style.display='block';errEl.scrollIntoView({behavior:'smooth',block:'center'});return;}
   errEl.style.display='none';
-  if (f.webAppUrl&&f.webAppUrl.trim()) {
-    try { var p=new URLSearchParams(); Object.keys(f).forEach(function(k){p.append(k,f[k]||'');}); new Image().src=f.webAppUrl.trim()+'?'+p.toString(); } catch(x){}
+  if(f.webAppUrl&&f.webAppUrl.trim()){
+    try{var p=new URLSearchParams();Object.keys(f).forEach(function(k){p.append(k,f[k]||'');});new Image().src=f.webAppUrl.trim()+'?'+p.toString();}catch(x){}
   }
   showDone(f);
 }
 
-function fmtReport(f) {
+function rep(c,n){var s='';for(var i=0;i<n;i++)s+=c;return s;}
+function fmtReport(f){
   var L=function(l,v){return v?l+': '+v+'\n':'';};
   return 'USAWP ATC ENCOUNTER REPORT\nGenerated: '+new Date().toLocaleString()+'\n'+rep('=',44)+'\n\n'
     +'EVENT & LOCATION\n'+L('Event Type',f.eventType)+L('Event Name',f.eventName)+L('Pool Site',f.poolSite)+L('Date',f.encounterDate)+L('Time',f.encounterTime)+'\n'
@@ -422,12 +494,11 @@ function fmtReport(f) {
     +'DISPOSITION\n'+L('EMS Activated',f.emsActivated)+L('EMS Details',f.emsDetails)+L('Referral Made',f.referralMade)+L('Referred To',f.referralTo)+L('RTP Status',f.rtpStatus)+L('Parent Contacted',f.parentContacted)+L('Coach Contacted',f.coachContacted)+L('Additional Notes',f.additionalNotes)+'\n'
     +'ATC INFORMATION\n'+L('ATC Name',f.atcName)+L('Credentials',f.atcCredentials)+'\n'+rep('=',44);
 }
-function rep(c,n){var s='';for(var i=0;i<n;i++)s+=c;return s;}
 
-function showDone(f) {
+function showDone(f){
   document.getElementById('mainForm').style.display='none';
-  var dv=document.getElementById('doneView'); dv.style.display='block';
-  var rpt=fmtReport(f); window._rpt=rpt;
+  var dv=document.getElementById('doneView');dv.style.display='block';
+  var rpt=fmtReport(f);window._rpt=rpt;
   var subj=encodeURIComponent('USAWP Encounter Report \u2013 '+f.athleteName+' \u2013 '+f.encounterDate);
   var ml='mailto:'+encodeURIComponent(f.notifyEmail||'')+'?subject='+subj+'&body='+encodeURIComponent(rpt);
   var tc=f.severity&&f.severity.indexOf('Green')>-1?'#276749':f.severity&&f.severity.indexOf('Amber')>-1?'#c05621':'#c53030';
@@ -436,7 +507,7 @@ function showDone(f) {
     +'<div style="font-weight:700;font-size:14px;color:#1a365d;margin-bottom:10px">Step 1 \u2014 Email backup</div>'
     +'<a href="'+ml+'" class="mla">📧 Open Email with Report Pre-filled'+(f.notifyEmail?'<div style="font-size:12px;font-weight:400;margin-top:2px;opacity:.85">To: '+e(f.notifyEmail)+'</div>':'')+'</a>'
     +'<div style="font-weight:700;font-size:14px;color:#1a365d;margin-bottom:10px">Step 2 \u2014 Copy report text</div>'
-    +'<button type="button" id="copyRptBtn" class="btn bb" style="width:100%;margin-bottom:10px;border-radius:8px" onclick="cpRpt()">Copy Report Text</button>'
+    +'<button type="button" id="cpRptBtn" class="btn bb" style="width:100%;margin-bottom:10px;border-radius:8px" onclick="cpRpt()">Copy Report Text</button>'
     +'<pre class="cb">'+e(rpt)+'</pre>'
 
 ```
@@ -447,22 +518,21 @@ function showDone(f) {
 window.scrollTo({top:0,behavior:‘smooth’});
 }
 
-function cpRpt(){doCp(window._rpt||’’,document.getElementById(‘copyRptBtn’),‘Copy Report Text’);}
+function cpRpt(){doCp(window._rpt||’’,document.getElementById(‘cpRptBtn’),‘Copy Report Text’);}
 
-function resetForm() {
+function resetForm(){
 document.getElementById(‘doneView’).style.display=‘none’;
 document.getElementById(‘mainForm’).style.display=‘block’;
 document.querySelectorAll(’#mainForm input:not([readonly]):not([type=file])’).forEach(function(el){el.value=’’;});
 document.querySelectorAll(’#mainForm textarea’).forEach(function(el){el.value=’’;});
 document.querySelectorAll(’.pill’).forEach(function(p){p.classList.remove(‘on’);});
-[‘g’,‘a’,‘r’].forEach(function(c){document.getElementById(‘sv-’+c).className=‘sv’;});
+[‘g’,‘a’,‘r’].forEach(function(c){document.getElementById(‘svbtn-’+c).className=‘svbtn’;});
 document.getElementById(‘severity’).value=’’;
-document.getElementById(‘encounterType’).value=’’;
 document.querySelectorAll(’.sb’).forEach(function(b){b.classList.remove(‘v’);});
-document.querySelectorAll(’[id^=“sv-”]’).forEach(function(s){if(![‘sv-g’,‘sv-a’,‘sv-r’].includes(s.id))s.textContent=‘Select\u2026’;});
+[‘eventType’,‘gender’,‘bodyRegion’,‘side’,‘onset’,‘mechanism’,‘emsActivated’,‘referralMade’,‘rtpStatus’,‘parentContacted’,‘coachContacted’,‘coachAdult’].forEach(function(k){var s=document.getElementById(‘sv-’+k);if(s)s.textContent=‘Select\u2026’;});
 document.getElementById(‘ageDisp’).value=’’;
 document.getElementById(‘minorBox’).style.display=‘none’;
-document.getElementById(‘coachAdult’).style.display=‘block’;
+document.getElementById(‘coachAdultRow’).style.display=‘block’;
 document.getElementById(‘emsDF’).style.display=‘none’;
 document.getElementById(‘refDF’).style.display=‘none’;
 document.getElementById(‘formErr’).style.display=‘none’;
@@ -482,25 +552,29 @@ var nm=document.getElementById(‘draftName’).value.trim()||((f.athleteName||�
 var d={id:Date.now(),name:nm,savedAt:new Date().toISOString(),form:f,tx:selTx.slice()};
 putDrafts([d].concat(getDrafts()));
 cm(‘draftMo’);
-var msg=document.getElementById(‘draftMsg’); msg.textContent=‘✅ Draft saved’; msg.style.display=‘block’;
+var msg=document.getElementById(‘draftMsg’);msg.textContent=‘✅ Draft saved’;msg.style.display=‘block’;
 setTimeout(function(){msg.style.display=‘none’;},2500);
 updDraftCount();
 }
 
 function loadDraft(id){
-var draft=getDrafts().filter(function(d){return d.id===id;})[0]; if(!draft) return;
+var draft=getDrafts().filter(function(d){return d.id===id;})[0];if(!draft)return;
 var f=draft.form;
 [‘webAppUrl’,‘notifyEmail’,‘eventType’,‘eventName’,‘poolSite’,‘encounterDate’,‘encounterTime’,‘athleteName’,‘dob’,‘gender’,‘teamClub’,‘usawpNum’,‘encounterType’,‘bodyRegion’,‘side’,‘onset’,‘mechanism’,‘subjective’,‘assessment’,‘severity’,‘treatmentNotes’,‘emsActivated’,‘emsDetails’,‘referralMade’,‘referralTo’,‘rtpStatus’,‘parentContacted’,‘coachContacted’,‘additionalNotes’,‘atcName’,‘atcCredentials’].forEach(function(k){var el=document.getElementById(k);if(el&&f[k]!==undefined)el.value=f[k];});
-var ca=document.getElementById(‘coachAdult’);if(ca)ca.querySelector(‘input[type=hidden]’).value=f.coachContacted||’’;
+var ca=document.getElementById(‘coachAdult’);if(ca)ca.value=f.coachContacted||’’;
 // Restore picker labels
-Object.keys(PK).forEach(function(k){var v=(document.getElementById(k)||{}).value||’’;if(v){var s=document.getElementById(‘sv-’+k);if(s)s.textContent=v;var b=document.getElementById(‘sb-’+k);if(b)b.classList.add(‘v’);}});
-// Restore severity
+[‘eventType’,‘gender’,‘bodyRegion’,‘side’,‘onset’,‘mechanism’,‘emsActivated’,‘referralMade’,‘rtpStatus’,‘parentContacted’,‘coachContacted’,‘coachAdult’].forEach(function(k){
+var v=(document.getElementById(k)||{}).value||’’;
+if(v){var s=document.getElementById(‘sv-’+k);if(s)s.textContent=v;var b=document.getElementById(‘sb-’+k);if(b)b.classList.add(‘v’);}
+});
 if(f.severity){var cls=f.severity.indexOf(‘Green’)>-1?‘g’:f.severity.indexOf(‘Amber’)>-1?‘a’:‘r’;setSev(f.severity,cls);}
-// Restore treatments
 selTx=(draft.tx||[]).slice();
 document.querySelectorAll(’#txPills .pill’).forEach(function(p){p.classList.toggle(‘on’,selTx.indexOf(p.textContent)>-1);});
-// Restore encounter type
-document.querySelectorAll(’#encPills .pill’).forEach(function(p){p.classList.toggle(‘on’,p.textContent===f.encounterType);});
+document.querySelectorAll(’.pills’).forEach(function(group){
+group.querySelectorAll(’.pill’).forEach(function(p){
+if(p.textContent===f.encounterType&&group.id!==‘txPills’)p.classList.add(‘on’);
+});
+});
 updAge();
 document.getElementById(‘emsDF’).style.display=f.emsActivated===‘Yes’?‘block’:‘none’;
 document.getElementById(‘refDF’).style.display=f.referralMade===‘Yes’?‘block’:‘none’;
@@ -511,10 +585,21 @@ window.scrollTo({top:0,behavior:‘smooth’});
 function delDraft(id){putDrafts(getDrafts().filter(function(d){return d.id!==id;}));renderDrafts();updDraftCount();}
 
 function renderDrafts(){
-var drafts=getDrafts(); updDraftCount();
-var c=document.getElementById(‘draftList’); if(!c)return;
+var drafts=getDrafts();updDraftCount();
+var c=document.getElementById(‘draftList’);if(!c)return;
 if(!drafts.length){c.innerHTML=’<div class="es">No drafts yet.<br><span style="font-size:12px">Use “Save Draft” on the Report tab.</span></div>’;return;}
-c.innerHTML=drafts.map(function(d){return ‘<div class="dc"><div style="font-weight:700;font-size:14px;color:#1a365d;margin-bottom:3px">’+e(d.name)+’</div><div style="font-size:12px;color:#718096;margin-bottom:8px">’+new Date(d.savedAt).toLocaleString()+’</div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">’+(d.form.eventType?’<span style="background:#ebf8ff;color:#2b6cb0;padding:3px 8px;border-radius:10px;font-size:12px;font-weight:600">’+e(d.form.eventType)+’</span>’:’’)+(d.form.encounterType?’<span style="background:#f7fafc;color:#4a5568;padding:3px 8px;border-radius:10px;font-size:12px">’+e(d.form.encounterType)+’</span>’:’’)+(d.form.atcName?’<span style="color:#718096;font-size:12px">ATC: ‘+e(d.form.atcName)+’</span>’:’’)+’</div><div class="brow"><button type="button" class="btn bp" style="flex:2;padding:10px;font-size:14px" onclick="loadDraft('+d.id+')">✏️ Load & Edit</button><button type="button" class="btn bo" style="flex:1;padding:10px;font-size:13px" onclick="showExport('+d.id+')">📄 Text</button><button type="button" class="btn bd" style="padding:10px;font-size:13px" onclick="delDraft('+d.id+')">🗑️</button></div></div>’;}).join(’’);
+c.innerHTML=drafts.map(function(d){
+return ‘<div class="dc"><div style="font-weight:700;font-size:14px;color:#1a365d;margin-bottom:3px">’+e(d.name)+’</div><div style="font-size:12px;color:#718096;margin-bottom:8px">’+new Date(d.savedAt).toLocaleString()+’</div>’
++’<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">’
++(d.form.eventType?’<span style="background:#ebf8ff;color:#2b6cb0;padding:3px 8px;border-radius:10px;font-size:12px;font-weight:600">’+e(d.form.eventType)+’</span>’:’’)
++(d.form.encounterType?’<span style="background:#f7fafc;color:#4a5568;padding:3px 8px;border-radius:10px;font-size:12px">’+e(d.form.encounterType)+’</span>’:’’)
++(d.form.atcName?’<span style="color:#718096;font-size:12px">ATC: ‘+e(d.form.atcName)+’</span>’:’’)
++’</div><div class="brow">’
++’<button type="button" class="btn bp" style="flex:2;padding:10px;font-size:14px" onclick="loadDraft('+d.id+')">✏️ Load & Edit</button>’
++’<button type="button" class="btn bo" style="flex:1;padding:10px;font-size:13px" onclick="showExport('+d.id+')">📄 Text</button>’
++’<button type="button" class="btn bd" style="padding:10px;font-size:13px" onclick="delDraft('+d.id+')">🗑️</button>’
++’</div></div>’;
+}).join(’’);
 }
 
 function updDraftCount(){var n=getDrafts().length;var b=document.getElementById(‘draftTabBtn’);if(b)b.textContent=‘📁 Drafts’+(n>0?’ (’+n+’)’:””);}
@@ -534,31 +619,15 @@ reader.onload=function(e2){try{var d=JSON.parse(e2.target.result);if(d.form){put
 reader.readAsText(file);ev.target.value=’’;
 }
 
-// Setup
-function buildSetup(){
-var steps=[[‘Create a Google Sheet’,‘Go to sheets.google.com, create a new spreadsheet, name it “USAWP Encounter Reports.”’],[‘Open Apps Script’,‘In the sheet click Extensions → Apps Script.’],[‘Paste the Script’,‘Delete any existing code and paste the script below.’],[‘Save’,‘Press Ctrl/Cmd+S. Name the project “USAWP Report Logger.”’],[‘Deploy as Web App’,‘Click Deploy → New deployment. Type: Web App. Execute as: Me. Who has access: Anyone. Click Deploy.’],[‘Authorize’,‘Click Authorize access, sign in with your Google account, allow permissions.’],[‘Copy the Web App URL’,‘Copy the URL shown (ends in /exec).’],[‘Paste URL in Delivery Settings’,‘Paste into the Delivery Settings field on the Report tab.’]];
-document.getElementById(‘setupContent’).innerHTML=steps.map(function(s,i){return ‘<div class="step"><div class="sn">’+(i+1)+’</div><div><div style="font-weight:700;font-size:14px;color:#1a365d;margin-bottom:2px">’+s[0]+’</div><div style="font-size:13px;color:#4a5568;line-height:1.5">’+s[1]+’</div></div></div>’;}).join(’’);
-document.getElementById(‘scriptPre’).textContent=SCRIPT;
-}
 function copyScript(){doCp(SCRIPT,null,null);alert(‘Script copied!’);}
 
-// Modals
 function om(id){document.getElementById(id).classList.add(‘on’);document.body.style.overflow=‘hidden’;}
 function cm(id){document.getElementById(id).classList.remove(‘on’);document.body.style.overflow=’’;}
-
-// Utils
 function e(t){return String(t||’’).replace(/&/g,’&’).replace(/</g,’<’).replace(/>/g,’>’);}
 function doCp(txt,btn,lbl){
 try{navigator.clipboard.writeText(txt).then(function(){if(btn){btn.textContent=‘✓ Copied!’;setTimeout(function(){btn.textContent=lbl;},2000);}});}
 catch(x){var ta=document.createElement(‘textarea’);ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand(‘copy’);document.body.removeChild(ta);if(btn){btn.textContent=‘✓ Copied!’;setTimeout(function(){btn.textContent=lbl;},2000);}}
 }
-
-// Run immediately — script is at bottom of body so DOM is ready
-mkPills(‘encPills’, ENC, ‘encounterType’, false);
-mkPills(‘txPills’, TX, null, true);
-buildSetup();
-renderDrafts();
-if(/iphone|ipad|ipod/i.test(navigator.userAgent)&&!window.navigator.standalone){document.getElementById(‘iosBanner’).style.display=‘block’;}
 </script>
 
 </body>
