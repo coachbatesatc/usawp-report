@@ -80,7 +80,7 @@ pre.cb{background:#f7fafc;border:1px solid #e2e8f0;border-radius:7px;padding:12p
 <body>
 <div class="wrap">
 
-<div class="hdr">
+<div id="jsTest" style="border-radius:8px;padding:12px;margin-bottom:14px;font-size:14px;font-weight:600;background:#fffff0;color:#744210;border:1px solid #f6e05e">⏳ Checking JavaScript…</div>
   <div class="logo">USAWP</div>
   <div><h1>ATC Encounter Report</h1><p>Sports Medicine — Independent Contractor</p></div>
 </div>
@@ -364,8 +364,22 @@ var selTx = [];
 
 var SCRIPT = 'function doGet(e){\n  try{\n    var s=SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();\n    var p=e.parameter;\n    if(!p.athleteName){if(s.getLastRow()===0)wh(s);return r("ping");}\n    if(s.getLastRow()===0)wh(s);\n    s.appendRow([p.timestamp||"",p.eventType||"",p.eventName||"",p.poolSite||"",p.encounterDate||"",p.encounterTime||"",p.athleteName||"",p.dob||"",p.age||"",p.gender||"",p.teamClub||"",p.usawpNum||"",p.encounterType||"",p.bodyRegion||"",p.side||"",p.mechanism||"",p.onset||"",p.subjective||"",p.assessment||"",p.severity||"",p.treatments||"",p.treatmentNotes||"",p.emsActivated||"",p.emsDetails||"",p.referralMade||"",p.referralTo||"",p.rtpStatus||"",p.parentContacted||"",p.coachContacted||"",p.additionalNotes||"",p.atcName||"",p.atcCredentials||""]);\n    return r("success");\n  }catch(err){return r("error:"+err.toString());}\n}\nfunction wh(s){s.appendRow(["Timestamp","Event Type","Event Name","Pool Site","Encounter Date","Encounter Time","Athlete Name","DOB","Age","Gender","Team/Club","USAWP #","Encounter Type","Body Region","Side","Mechanism","Onset","Subjective","Assessment","Severity","Treatments","Treatment Notes","EMS Activated","EMS Details","Referral Made","Referred To","RTP Status","Parent Contacted","Coach Contacted","Additional Notes","ATC Name","ATC Credentials"]);}\nfunction r(m){return ContentService.createTextOutput(JSON.stringify({result:m})).setMimeType(ContentService.MimeType.JSON);}';
 
-document.getElementById('scriptPre').textContent = SCRIPT;
-renderDrafts();
+try {
+  document.getElementById('scriptPre').textContent = SCRIPT;
+  renderDrafts();
+  document.getElementById('jsTest').textContent = '✅ JavaScript is working';
+  document.getElementById('jsTest').style.background = '#f0fff4';
+  document.getElementById('jsTest').style.color = '#276749';
+} catch(err) {
+  document.getElementById('jsTest').textContent = '❌ JS Error: ' + err.message;
+  document.getElementById('jsTest').style.background = '#fff5f5';
+  document.getElementById('jsTest').style.color = '#c53030';
+}
+window.onerror = function(msg, src, line) {
+  document.getElementById('jsTest').textContent = '❌ Error: ' + msg + ' (line ' + line + ')';
+  document.getElementById('jsTest').style.background = '#fff5f5';
+  document.getElementById('jsTest').style.color = '#c53030';
+};
 
 // Tabs
 function showPg(name, btn) {
