@@ -311,17 +311,21 @@ var activePicker = null;
 var SCRIPT_CODE = 'function doGet(e) {\n  try {\n    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();\n    var p = e.parameter;\n    if (!p.athleteName) {\n      if (sheet.getLastRow() === 0) writeHeaders(sheet);\n      return respond("ping");\n    }\n    if (sheet.getLastRow() === 0) writeHeaders(sheet);\n    sheet.appendRow([\n      p.timestamp||"",p.eventType||"",p.eventName||"",p.poolSite||"",\n      p.encounterDate||"",p.encounterTime||"",\n      p.athleteName||"",p.dob||"",p.age||"",p.gender||"",p.teamClub||"",p.usawpNum||"",\n      p.encounterType||"",p.bodyRegion||"",p.side||"",p.mechanism||"",p.onset||"",p.subjective||"",\n      p.assessment||"",p.severity||"",p.treatments||"",p.treatmentNotes||"",\n      p.emsActivated||"",p.emsDetails||"",p.referralMade||"",p.referralTo||"",\n      p.rtpStatus||"",p.parentContacted||"",p.coachContacted||"",p.additionalNotes||"",\n      p.atcName||"",p.atcCredentials||""\n    ]);\n    return respond("success");\n  } catch(err) { return respond("error: "+err.toString()); }\n}\nfunction writeHeaders(sheet) {\n  sheet.appendRow(["Timestamp","Event Type","Event Name","Pool Site","Encounter Date","Encounter Time","Athlete Name","DOB","Age","Gender","Team/Club","USAWP #","Encounter Type","Body Region","Side","Mechanism","Onset","Subjective","Assessment","Severity","Treatments","Treatment Notes","EMS Activated","EMS Details","Referral Made","Referred To","RTP Status","Parent Contacted","Coach Contacted","Additional Notes","ATC Name","ATC Credentials"]);\n}\nfunction respond(msg) {\n  return ContentService.createTextOutput(JSON.stringify({result:msg})).setMimeType(ContentService.MimeType.JSON);\n}';
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
-window.addEventListener('DOMContentLoaded', function() {
+function initApp() {
   buildPills('encounterTypePills', ENCOUNTER_TYPES, 'encounterType', false);
   buildPills('treatmentPills', TREATMENTS, null, true);
   buildSetupSteps();
   renderDrafts();
   attachPickers();
-  // iOS banner
   var isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
   var isStandalone = window.navigator.standalone === true;
   if (isIos && !isStandalone) document.getElementById('iosBanner').style.display = 'block';
-});
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}
 
 // ── PICKERS ───────────────────────────────────────────────────────────────────
 function attachPickers() {
