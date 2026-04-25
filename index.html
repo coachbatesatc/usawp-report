@@ -1,0 +1,524 @@
+import { useState, useEffect } from “react”;
+
+const PICKERS = {
+eventType:          { title: “Event Type”,          opts: [“National League”,“NTSC Camp”,“ODP Event”,“Pipeline Event”,“Training Camp”,“Tournament”,“Other”] },
+gender:             { title: “Gender”,              opts: [“Male”,“Female”,“Non-binary”,“Prefer not to say”] },
+bodyRegion:         { title: “Body Region”,         opts: [“Head/Face”,“Neck”,“Shoulder”,“Upper Arm”,“Elbow”,“Forearm”,“Wrist”,“Hand/Finger”,“Chest/Thorax”,“Abdomen”,“Upper Back”,“Lower Back”,“Hip/Groin”,“Thigh”,“Knee”,“Lower Leg”,“Ankle”,“Foot/Toe”,“Multiple”,“N/A”] },
+side:               { title: “Side”,                opts: [“Left”,“Right”,“Bilateral”,“N/A”] },
+onset:              { title: “Onset”,               opts: [“Acute”,“Chronic”,“Acute-on-Chronic”,“N/A”] },
+mechanism:          { title: “Mechanism”,           opts: [“Contact”,“Non-contact”,“Overuse/Repetitive”,“Environmental”,“Unknown”,“N/A”] },
+emsActivated:       { title: “EMS Activated?”,      opts: [“No”,“Yes”] },
+referralMade:       { title: “Referral Made?”,      opts: [“No”,“Yes”] },
+rtpStatus:          { title: “Return to Play”,      opts: [“Full Return to Play”,“Return with Modification”,“Withheld from Activity”,“Referred – Did Not Return”,“To Be Determined”] },
+parentContacted:    { title: “Parent/Guardian Contacted?”, opts: [“Yes”,“No – Unable to reach”,“No – Not indicated”] },
+coachContacted:     { title: “Coach Contacted?”,    opts: [“Yes”,“No”] },
+};
+const ENCOUNTER_TYPES = [“Injury”,“Illness”,“Treatment/Follow-up”,“Consultation”,“Wellness Check”,“Other”];
+const TREATMENTS = [“First Aid”,“Manual Therapy”,“Taping”,“Bracing”,“Splinting”,“Modality”,“Ice/Cryotherapy”,“Heat”,“Wound Care”,“Consultation”,“Education/Counseling”,“No Treatment Required”,“Other”];
+const SEVERITY = [
+{ label: “Green – Minor / Monitor”,       cls: { border:”#276749”, bg:”#f0fff4”, color:”#276749” } },
+{ label: “Amber – Moderate / Restricted”, cls: { border:”#c05621”, bg:”#fffaf0”, color:”#c05621” } },
+{ label: “Red – Severe / Withheld”,       cls: { border:”#c53030”, bg:”#fff5f5”, color:”#c53030” } },
+];
+const DRAFT_KEY = “usawp_drafts_v4”;
+
+function emptyForm() {
+return {
+webAppUrl:””, notifyEmail:””,
+eventType:””, eventName:””, poolSite:””, encounterDate:””, encounterTime:””,
+athleteName:””, dob:””, gender:””, teamClub:””, usawpNum:””,
+encounterType:””, treatments:[],
+bodyRegion:””, side:””, onset:””, mechanism:””, subjective:””,
+assessment:””, severity:””,
+treatmentNotes:””, emsActivated:””, emsDetails:””, referralMade:””, referralTo:””,
+rtpStatus:””, parentContacted:””, coachContacted:””, additionalNotes:””,
+atcName:””, atcCredentials:””
+};
+}
+
+function calcAge(dob) {
+if (!dob) return null;
+const b = new Date(dob), t = new Date();
+let a = t.getFullYear() - b.getFullYear();
+if (t.getMonth() - b.getMonth() < 0 || (t.getMonth() === b.getMonth() && t.getDate() < b.getDate())) a–;
+return a >= 0 ? a : null;
+}
+
+function formatReport(f) {
+const L = (l, v) => v ? `${l}: ${v}\n` : “”;
+const age = calcAge(f.dob);
+return [
+“USAWP ATC ENCOUNTER REPORT”,
+`Generated: ${new Date().toLocaleString()}`,
+“=”.repeat(44), “”,
+“EVENT & LOCATION”,
+L(“Event Type”,f.eventType)+L(“Event Name”,f.eventName)+L(“Pool Site”,f.poolSite)+L(“Date”,f.encounterDate)+L(“Time”,f.encounterTime),
+“ATHLETE INFORMATION”,
+L(“Name”,f.athleteName)+L(“DOB”,f.dob)+(age!=null?`Age: ${age} yrs\n`:””)+L(“Gender”,f.gender)+L(“Team/Club”,f.teamClub)+L(“USAWP #”,f.usawpNum),
+“ENCOUNTER TYPE”, L(“Reason”,f.encounterType),
+“CHIEF COMPLAINT & HISTORY”,
+L(“Body Region”,f.bodyRegion)+L(“Side”,f.side)+L(“Onset”,f.onset)+L(“Mechanism”,f.mechanism)+L(“Subjective”,f.subjective),
+“ASSESSMENT”, L(“Assessment”,f.assessment)+L(“Severity”,f.severity),
+“TREATMENT & MANAGEMENT”,
+L(“Treatments”,Array.isArray(f.treatments)?f.treatments.join(”, “):f.treatments)+L(“Notes”,f.treatmentNotes),
+“DISPOSITION”,
+L(“EMS Activated”,f.emsActivated)+L(“EMS Details”,f.emsDetails)+L(“Referral Made”,f.referralMade)+L(“Referred To”,f.referralTo)+L(“RTP Status”,f.rtpStatus)+L(“Parent Contacted”,f.parentContacted)+L(“Coach Contacted”,f.coachContacted)+L(“Additional Notes”,f.additionalNotes),
+“ATC INFORMATION”, L(“ATC Name”,f.atcName)+L(“Credentials”,f.atcCredentials),
+“=”.repeat(44)
+].join(”\n”);
+}
+
+// ── PICKER SHEET ──────────────────────────────────────────────────────────────
+function PickerSheet({ picker, current, onSelect, onClose }) {
+if (!picker) return null;
+const cfg = PICKERS[picker];
+return (
+<div onClick={onClose} style={{ position:“fixed”, inset:0, background:“rgba(0,0,0,0.45)”, zIndex:1000, display:“flex”, alignItems:“flex-end”, justifyContent:“center” }}>
+<div onClick={e => e.stopPropagation()} style={{ background:”#fff”, borderRadius:“18px 18px 0 0”, width:“100%”, maxWidth:680, maxHeight:“70vh”, display:“flex”, flexDirection:“column” }}>
+<div style={{ padding:“16px”, borderBottom:“1px solid #e2e8f0”, display:“flex”, justifyContent:“space-between”, alignItems:“center”, flexShrink:0 }}>
+<span style={{ fontWeight:700, fontSize:17, color:”#1a365d” }}>{cfg.title}</span>
+<button onClick={onClose} style={{ background:”#2b6cb0”, color:”#fff”, border:“none”, borderRadius:8, padding:“8px 18px”, fontSize:15, fontWeight:700 }}>Done</button>
+</div>
+<div style={{ overflowY:“auto”, WebkitOverflowScrolling:“touch” }}>
+{cfg.opts.map(o => (
+<div key={o} onClick={() => onSelect(picker, o)}
+style={{ padding:“17px 16px”, fontSize:17, borderBottom:“1px solid #f7fafc”, display:“flex”, justifyContent:“space-between”, alignItems:“center”, background: o === current ? “#f7fbff” : “#fff”, color: o === current ? “#2b6cb0” : “#2d3748”, fontWeight: o === current ? 600 : 400 }}>
+<span>{o}</span>
+{o === current && <span style={{ color:”#2b6cb0” }}>✓</span>}
+</div>
+))}
+</div>
+</div>
+</div>
+);
+}
+
+// ── FIELD COMPONENTS ──────────────────────────────────────────────────────────
+function Label({ text, required }) {
+return <div style={{ fontSize:12, fontWeight:600, color:”#4a5568”, marginBottom:5, textTransform:“uppercase”, letterSpacing:“0.05em” }}>{text}{required && <span style={{ color:”#e53e3e” }}> *</span>}</div>;
+}
+
+function SelBtn({ fieldId, value, onOpen }) {
+return (
+<button type=“button” onClick={() => onOpen(fieldId)}
+style={{ width:“100%”, padding:“13px 12px”, border:`1.5px solid ${value ? "#2b6cb0" : "#cbd5e0"}`, borderRadius:8, fontSize:16, background:”#fff”, color: value ? “#2d3748” : “#a0aec0”, textAlign:“left”, display:“flex”, justifyContent:“space-between”, alignItems:“center”, fontFamily:“inherit” }}>
+<span>{value || “Select…”}</span>
+<span style={{ color:”#718096”, fontSize:12, marginLeft:8 }}>▼</span>
+</button>
+);
+}
+
+function TxtInput({ id, value, onChange, placeholder, type=“text”, readonly=false }) {
+return (
+<input type={type} value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder} readOnly={readonly}
+style={{ width:“100%”, padding:“13px 12px”, border:“1.5px solid #cbd5e0”, borderRadius:8, fontSize:16, background: readonly ? “#f7fafc” : “#fff”, color: readonly ? “#718096” : “#2d3748”, fontFamily:“inherit”, WebkitAppearance:“none”, outline:“none” }} />
+);
+}
+
+function TxtArea({ value, onChange, placeholder }) {
+return (
+<textarea value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder} rows={3}
+style={{ width:“100%”, padding:“13px 12px”, border:“1.5px solid #cbd5e0”, borderRadius:8, fontSize:16, background:”#fff”, color:”#2d3748”, fontFamily:“inherit”, WebkitAppearance:“none”, outline:“none”, resize:“vertical” }} />
+);
+}
+
+function SecHead({ title }) {
+return <div style={{ background:”#1a365d”, color:”#fff”, padding:“8px 12px”, borderRadius:6, fontSize:12, fontWeight:700, marginBottom:12, marginTop:8, letterSpacing:“0.05em”, textTransform:“uppercase” }}>{title}</div>;
+}
+
+function Grid({ cols=2, children }) {
+return <div style={{ display:“grid”, gridTemplateColumns:`repeat(${cols}, 1fr)`, gap:10 }}>{children}</div>;
+}
+
+function Pill({ label, active, onToggle }) {
+return (
+<button type=“button” onClick={onToggle}
+style={{ padding:“10px 14px”, borderRadius:20, border:`1.5px solid ${active ? "#2b6cb0" : "#cbd5e0"}`, fontSize:14, fontWeight:600, background: active ? “#ebf8ff” : “#fff”, color: active ? “#2b6cb0” : “#4a5568”, cursor:“pointer” }}>
+{label}
+</button>
+);
+}
+
+// ── DRAFTS ────────────────────────────────────────────────────────────────────
+function getDrafts() { try { return JSON.parse(localStorage.getItem(DRAFT_KEY) || “[]”); } catch(e) { return []; } }
+function putDrafts(d) { try { localStorage.setItem(DRAFT_KEY, JSON.stringify(d)); } catch(e) {} }
+
+// ── MAIN APP ──────────────────────────────────────────────────────────────────
+export default function App() {
+const [tab, setTab] = useState(“report”);
+const [form, setForm] = useState(emptyForm());
+const [picker, setPicker] = useState(null);
+const [submitted, setSubmitted] = useState(false);
+const [submittedForm, setSubmittedForm] = useState(null);
+const [drafts, setDrafts] = useState(getDrafts());
+const [draftModal, setDraftModal] = useState(false);
+const [draftName, setDraftName] = useState(””);
+const [draftSaved, setDraftSaved] = useState(false);
+const [errorMsg, setErrorMsg] = useState(””);
+const [exportDraft, setExportDraft] = useState(null);
+const [copied, setCopied] = useState(false);
+
+const age = calcAge(form.dob);
+const minor = age !== null && age < 18;
+
+const set = (k, v) => setForm(f => Object.assign({}, f, { [k]: v }));
+const toggleTx = t => setForm(f => {
+const txs = Array.isArray(f.treatments) ? f.treatments : [];
+return Object.assign({}, f, { treatments: txs.includes(t) ? txs.filter(x => x !== t) : […txs, t] });
+});
+
+const openPicker = k => setPicker(k);
+const onSelect = (k, v) => {
+set(k, v);
+setPicker(null);
+if (k === “emsActivated” && v !== “Yes”) set(“emsDetails”, “”);
+if (k === “referralMade” && v !== “Yes”) set(“referralTo”, “”);
+};
+
+const validate = () => [“eventType”,“poolSite”,“encounterDate”,“encounterTime”,“athleteName”,“encounterType”,“atcName”].every(k => form[k] && form[k].trim());
+
+const handleSubmit = async () => {
+if (!validate()) { setErrorMsg(“Please fill in all required fields (marked *).”); return; }
+setErrorMsg(””);
+if (form.webAppUrl && form.webAppUrl.trim()) {
+try {
+const params = new URLSearchParams();
+const payload = Object.assign({}, form, { age: age !== null ? String(age) : “”, treatments: Array.isArray(form.treatments) ? form.treatments.join(”; “) : “”, timestamp: new Date().toISOString() });
+Object.keys(payload).forEach(k => params.append(k, payload[k] || “”));
+new Image().src = form.webAppUrl.trim() + “?” + params.toString();
+} catch(e) {}
+}
+setSubmittedForm(Object.assign({}, form, { age }));
+setSubmitted(true);
+};
+
+const handleReset = () => { setForm(emptyForm()); setSubmitted(false); setSubmittedForm(null); setErrorMsg(””); };
+
+const saveDraftConfirm = () => {
+const name = draftName.trim() || `${form.athleteName || "Unnamed"} – ${form.encounterDate || "No date"}`;
+const draft = { id: Date.now(), name, savedAt: new Date().toISOString(), form: Object.assign({}, form) };
+const updated = [draft, …drafts];
+setDrafts(updated); putDrafts(updated);
+setDraftModal(false); setDraftName(””);
+setDraftSaved(true); setTimeout(() => setDraftSaved(false), 2500);
+};
+
+const loadDraft = d => {
+setForm(Object.assign({}, emptyForm(), d.form));
+setTab(“report”); setSubmitted(false);
+};
+
+const deleteDraft = id => {
+const updated = drafts.filter(d => d.id !== id);
+setDrafts(updated); putDrafts(updated);
+};
+
+const doCopy = text => {
+try { navigator.clipboard.writeText(text).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); }); } catch(e) {}
+};
+
+// Submitted screen
+if (submitted && submittedForm) {
+const report = formatReport(Object.assign({}, submittedForm, { treatments: Array.isArray(submittedForm.treatments) ? submittedForm.treatments.join(”, “) : submittedForm.treatments }));
+const subj = encodeURIComponent(`USAWP Encounter Report – ${submittedForm.athleteName} – ${submittedForm.encounterDate}`);
+const mailto = `mailto:${encodeURIComponent(submittedForm.notifyEmail||"")}?subject=${subj}&body=${encodeURIComponent(report)}`;
+const sevColor = submittedForm.severity?.startsWith(“Green”) ? “#276749” : submittedForm.severity?.startsWith(“Amber”) ? “#c05621” : “#c53030”;
+return (
+<div style={{ maxWidth:680, margin:“0 auto”, padding:12, fontFamily:”-apple-system,BlinkMacSystemFont,‘Segoe UI’,sans-serif” }}>
+<div style={{ background:”#f0fff4”, border:“1px solid #9ae6b4”, borderRadius:10, padding:20, marginBottom:14, textAlign:“center” }}>
+<div style={{ fontSize:28, marginBottom:4 }}>✅</div>
+<div style={{ fontWeight:700, fontSize:18, color:”#276749” }}>Report Complete</div>
+<div style={{ fontSize:13, color:”#4a5568”, marginTop:4 }}>{submittedForm.webAppUrl ? “Sent to Google Sheet — verify receipt.” : “No Sheet URL — use email backup below.”}</div>
+</div>
+<div style={{ fontWeight:700, fontSize:14, color:”#1a365d”, marginBottom:10 }}>Step 1 — Email backup</div>
+<a href={mailto} style={{ display:“block”, background:”#2b6cb0”, color:”#fff”, borderRadius:8, padding:14, fontWeight:700, fontSize:15, textAlign:“center”, textDecoration:“none”, marginBottom:14 }}>
+📧 Open Email with Report Pre-filled
+{submittedForm.notifyEmail && <div style={{ fontSize:12, fontWeight:400, marginTop:2, opacity:0.85 }}>To: {submittedForm.notifyEmail}</div>}
+</a>
+<div style={{ fontWeight:700, fontSize:14, color:”#1a365d”, marginBottom:10 }}>Step 2 — Copy report text</div>
+<button onClick={() => doCopy(report)} style={{ width:“100%”, padding:12, background: copied ? “#276749” : “#2b6cb0”, color:”#fff”, border:“none”, borderRadius:8, fontWeight:700, fontSize:15, marginBottom:10 }}>
+{copied ? “✓ Copied!” : “Copy Report Text”}
+</button>
+<pre style={{ background:”#f7fafc”, border:“1px solid #e2e8f0”, borderRadius:7, padding:12, fontSize:11, lineHeight:1.6, overflowX:“auto”, whiteSpace:“pre-wrap”, wordBreak:“break-word”, maxHeight:200, overflowY:“auto”, color:”#2d3748”, marginBottom:14 }}>{report}</pre>
+<div style={{ background:”#fff”, border:“1px solid #e2e8f0”, borderRadius:10, padding:14, marginBottom:14 }}>
+<div style={{ fontWeight:700, fontSize:13, color:”#1a365d”, marginBottom:10 }}>Quick Summary</div>
+{[
+[“Event”, `${submittedForm.eventType}${submittedForm.eventName ? " – "+submittedForm.eventName : ""}`],
+[“Site”, submittedForm.poolSite],
+[“Date/Time”, `${submittedForm.encounterDate} @ ${submittedForm.encounterTime}`],
+[“Athlete”, `${submittedForm.athleteName}${submittedForm.age != null ? ", Age "+submittedForm.age : ""}${submittedForm.usawpNum ? " | #"+submittedForm.usawpNum : ""}`],
+[“Encounter”, submittedForm.encounterType],
+[“Assessment”, submittedForm.assessment],
+[“Severity”, submittedForm.severity],
+[“RTP”, submittedForm.rtpStatus],
+[“ATC”, `${submittedForm.atcName}${submittedForm.atcCredentials ? ", "+submittedForm.atcCredentials : ""}`],
+].filter(r => r[1]).map(([k, v]) => (
+<div key={k} style={{ display:“flex”, borderBottom:“1px solid #f7fafc”, padding:“6px 0”, fontSize:14 }}>
+<span style={{ width:110, minWidth:110, color:”#718096”, fontWeight:600, fontSize:13 }}>{k}</span>
+<span style={{ flex:1, color: k===“Severity” ? sevColor : “#2d3748”, fontWeight: k===“Severity” ? 700 : 400 }}>{v}</span>
+</div>
+))}
+</div>
+<button onClick={handleReset} style={{ width:“100%”, padding:14, background:”#1a365d”, color:”#fff”, border:“none”, borderRadius:8, fontWeight:700, fontSize:15 }}>+ New Encounter Report</button>
+</div>
+);
+}
+
+const treatments = Array.isArray(form.treatments) ? form.treatments : [];
+
+return (
+<div style={{ maxWidth:680, margin:“0 auto”, padding:12, fontFamily:”-apple-system,BlinkMacSystemFont,‘Segoe UI’,sans-serif”, paddingBottom:32 }}>
+{/* Header */}
+<div style={{ background:”#1a365d”, borderRadius:10, padding:“14px 16px”, marginBottom:14, display:“flex”, alignItems:“center”, gap:12 }}>
+<div style={{ background:”#2b6cb0”, borderRadius:8, padding:“7px 11px”, fontWeight:900, fontSize:17, color:”#fff”, letterSpacing:1 }}>USAWP</div>
+<div>
+<div style={{ color:”#fff”, fontWeight:700, fontSize:16 }}>ATC Encounter Report</div>
+<div style={{ color:”#90cdf4”, fontSize:12, marginTop:2 }}>Sports Medicine — Independent Contractor</div>
+</div>
+</div>
+
+```
+  {/* Tabs */}
+  <div style={{ display:"flex", gap:6, marginBottom:14 }}>
+    {[["report","📋 Report"],["drafts",`📁 Drafts${drafts.length > 0 ? ` (${drafts.length})` : ""}`],["setup","⚙️ Setup"]].map(([s,label]) => (
+      <button key={s} type="button" onClick={() => setTab(s)}
+        style={{ flex:1, padding:"10px 4px", borderRadius:8, border:"none", fontWeight:600, fontSize:13, background: tab===s ? "#2b6cb0" : "#e2e8f0", color: tab===s ? "#fff" : "#4a5568" }}>
+        {label}
+      </button>
+    ))}
+  </div>
+
+  {/* ── REPORT TAB ── */}
+  {tab === "report" && (
+    <div>
+      {/* Delivery */}
+      <div style={{ background:"#ebf8ff", border:"1px solid #90cdf4", borderRadius:8, padding:12, marginBottom:14 }}>
+        <div style={{ fontWeight:700, color:"#2b6cb0", marginBottom:10, fontSize:14 }}>🔗 Delivery Settings</div>
+        <div style={{ marginBottom:10 }}><Label text="Google Sheet Web App URL" /><TxtInput value={form.webAppUrl} onChange={v => set("webAppUrl",v)} placeholder="https://script.google.com/macros/s/…/exec" type="url" /></div>
+        <div><Label text="Notification Email" /><TxtInput value={form.notifyEmail} onChange={v => set("notifyEmail",v)} placeholder="your@email.com" type="email" /></div>
+      </div>
+
+      <SecHead title="Event & Location" />
+      <Grid><div><Label text="Event Type" required /><SelBtn fieldId="eventType" value={form.eventType} onOpen={openPicker} /></div>
+      <div><Label text="Event Name" /><TxtInput value={form.eventName} onChange={v=>set("eventName",v)} placeholder="e.g. NL Wave 2" /></div></Grid>
+      <div style={{ marginBottom:10 }}><Label text="Pool Site / Venue" required /><TxtInput value={form.poolSite} onChange={v=>set("poolSite",v)} placeholder="Facility name & city" /></div>
+      <Grid><div><Label text="Date" required /><TxtInput value={form.encounterDate} onChange={v=>set("encounterDate",v)} type="date" /></div>
+      <div><Label text="Time" required /><TxtInput value={form.encounterTime} onChange={v=>set("encounterTime",v)} type="time" /></div></Grid>
+
+      <SecHead title="Athlete Information" />
+      <div style={{ marginBottom:10 }}><Label text="Athlete Name" required /><TxtInput value={form.athleteName} onChange={v=>set("athleteName",v)} placeholder="Last, First" /></div>
+      <Grid>
+        <div><Label text="Date of Birth" /><TxtInput value={form.dob} onChange={v=>set("dob",v)} type="date" /></div>
+        <div><Label text="Age" /><TxtInput value={age !== null ? `${age} yrs${minor?" — MINOR":""}` : ""} onChange={()=>{}} readonly /></div>
+        <div><Label text="Gender" /><SelBtn fieldId="gender" value={form.gender} onOpen={openPicker} /></div>
+        <div><Label text="Team / Club" /><TxtInput value={form.teamClub} onChange={v=>set("teamClub",v)} placeholder="Club or team" /></div>
+      </Grid>
+      <div style={{ marginBottom:10 }}><Label text="USAWP # (if known)" /><TxtInput value={form.usawpNum} onChange={v=>set("usawpNum",v)} placeholder="Optional" /></div>
+
+      <SecHead title="Encounter Type" />
+      <div style={{ marginBottom:14 }}>
+        <Label text="Reason for Encounter" required />
+        <div style={{ display:"flex", flexWrap:"wrap", gap:8 }}>
+          {ENCOUNTER_TYPES.map(t => <Pill key={t} label={t} active={form.encounterType===t} onToggle={() => set("encounterType", t)} />)}
+        </div>
+      </div>
+
+      <SecHead title="Chief Complaint & History" />
+      <Grid>
+        <div><Label text="Body Region" /><SelBtn fieldId="bodyRegion" value={form.bodyRegion} onOpen={openPicker} /></div>
+        <div><Label text="Side" /><SelBtn fieldId="side" value={form.side} onOpen={openPicker} /></div>
+        <div><Label text="Onset" /><SelBtn fieldId="onset" value={form.onset} onOpen={openPicker} /></div>
+        <div><Label text="Mechanism" /><SelBtn fieldId="mechanism" value={form.mechanism} onOpen={openPicker} /></div>
+      </Grid>
+      <div style={{ marginBottom:10 }}><Label text="Subjective / History" /><TxtArea value={form.subjective} onChange={v=>set("subjective",v)} placeholder="Athlete's description, onset, relevant history…" /></div>
+
+      <SecHead title="Assessment" />
+      <div style={{ marginBottom:10 }}><Label text="Working Assessment" /><TxtInput value={form.assessment} onChange={v=>set("assessment",v)} placeholder="e.g. Acute lateral ankle sprain, Grade I" /></div>
+      <div style={{ marginBottom:14 }}>
+        <Label text="Severity Tier" />
+        {SEVERITY.map(s => (
+          <button key={s.label} type="button" onClick={() => set("severity", s.label)}
+            style={{ width:"100%", padding:"12px 14px", borderRadius:8, border:`2px solid ${form.severity===s.label ? s.cls.border : "#cbd5e0"}`, background: form.severity===s.label ? s.cls.bg : "#fff", color: form.severity===s.label ? s.cls.color : "#4a5568", fontWeight:600, fontSize:15, textAlign:"left", marginBottom:8, fontFamily:"inherit" }}>
+            {s.label}
+          </button>
+        ))}
+      </div>
+
+      <SecHead title="Treatment & Management" />
+      <div style={{ marginBottom:10 }}>
+        <Label text="Treatment(s) Provided" />
+        <div style={{ display:"flex", flexWrap:"wrap", gap:8 }}>
+          {TREATMENTS.map(t => <Pill key={t} label={t} active={treatments.includes(t)} onToggle={() => toggleTx(t)} />)}
+        </div>
+      </div>
+      <div style={{ marginBottom:10 }}><Label text="Treatment Notes" /><TxtArea value={form.treatmentNotes} onChange={v=>set("treatmentNotes",v)} placeholder="Techniques, parameters, clinical findings, response…" /></div>
+
+      <SecHead title="Disposition & Follow-Up" />
+      <Grid>
+        <div><Label text="EMS Activated?" /><SelBtn fieldId="emsActivated" value={form.emsActivated} onOpen={openPicker} /></div>
+        {form.emsActivated==="Yes" && <div><Label text="EMS Details" /><TxtInput value={form.emsDetails} onChange={v=>set("emsDetails",v)} placeholder="Agency, outcome…" /></div>}
+        <div><Label text="Referral Made?" /><SelBtn fieldId="referralMade" value={form.referralMade} onOpen={openPicker} /></div>
+        {form.referralMade==="Yes" && <div><Label text="Referred To" /><TxtInput value={form.referralTo} onChange={v=>set("referralTo",v)} placeholder="e.g. ED, orthopedist…" /></div>}
+      </Grid>
+      <div style={{ marginBottom:10 }}><Label text="Return to Play Status" /><SelBtn fieldId="rtpStatus" value={form.rtpStatus} onOpen={openPicker} /></div>
+
+      {minor && (
+        <div style={{ background:"#fffff0", border:"1px solid #f6e05e", borderRadius:8, padding:12, marginBottom:14 }}>
+          <div style={{ fontWeight:700, color:"#975a16", fontSize:13, marginBottom:10 }}>⚠️ Minor Athlete — Notification Required</div>
+          <Grid>
+            <div><Label text="Parent/Guardian Contacted?" /><SelBtn fieldId="parentContacted" value={form.parentContacted} onOpen={openPicker} /></div>
+            <div><Label text="Coach Contacted?" /><SelBtn fieldId="coachContacted" value={form.coachContacted} onOpen={openPicker} /></div>
+          </Grid>
+        </div>
+      )}
+      {!minor && (
+        <div style={{ marginBottom:10 }}><Label text="Coach Contacted?" /><SelBtn fieldId="coachContacted" value={form.coachContacted} onOpen={openPicker} /></div>
+      )}
+      <div style={{ marginBottom:10 }}><Label text="Additional Notes" /><TxtArea value={form.additionalNotes} onChange={v=>set("additionalNotes",v)} placeholder="Follow-up plan, observations…" /></div>
+
+      <SecHead title="ATC Information" />
+      <Grid>
+        <div><Label text="ATC Name" required /><TxtInput value={form.atcName} onChange={v=>set("atcName",v)} placeholder="First Last" /></div>
+        <div><Label text="Credentials" /><TxtInput value={form.atcCredentials} onChange={v=>set("atcCredentials",v)} placeholder="ATC, CSCS…" /></div>
+      </Grid>
+
+      {errorMsg && <div style={{ background:"#fff5f5", border:"1px solid #fc8181", borderRadius:8, padding:12, marginBottom:12, fontSize:14, fontWeight:600, color:"#c53030" }}>⚠️ {errorMsg}</div>}
+      {draftSaved && <div style={{ background:"#f0fff4", border:"1px solid #9ae6b4", borderRadius:8, padding:12, marginBottom:12, fontSize:14, fontWeight:600, color:"#276749" }}>✅ Draft saved</div>}
+
+      <div style={{ display:"flex", gap:10, marginTop:4 }}>
+        <button type="button" onClick={() => { setDraftName(""); setDraftModal(true); }}
+          style={{ flex:1, padding:14, background:"#fff", color:"#2b6cb0", border:"2px solid #2b6cb0", borderRadius:8, fontWeight:700, fontSize:15 }}>
+          💾 Save Draft
+        </button>
+        <button type="button" onClick={handleSubmit}
+          style={{ flex:2, padding:14, background:"#1a365d", color:"#fff", border:"none", borderRadius:8, fontWeight:700, fontSize:15 }}>
+          Submit Report →
+        </button>
+      </div>
+    </div>
+  )}
+
+  {/* ── DRAFTS TAB ── */}
+  {tab === "drafts" && (
+    <div>
+      <div style={{ background:"#1a365d", borderRadius:8, padding:12, marginBottom:14 }}>
+        <div style={{ color:"#fff", fontWeight:700, fontSize:15 }}>Saved Drafts</div>
+        <div style={{ color:"#90cdf4", fontSize:12, marginTop:2 }}>Saved in this browser — persist between sessions.</div>
+      </div>
+      {drafts.length === 0 ? (
+        <div style={{ textAlign:"center", padding:"40px 20px", color:"#a0aec0", fontSize:14, border:"2px dashed #e2e8f0", borderRadius:10 }}>
+          No drafts yet.<br /><span style={{ fontSize:12 }}>Use "Save Draft" on the Report tab.</span>
+        </div>
+      ) : drafts.map(d => (
+        <div key={d.id} style={{ border:"1px solid #e2e8f0", borderRadius:10, padding:14, background:"#fff", marginBottom:10 }}>
+          <div style={{ fontWeight:700, fontSize:14, color:"#1a365d", marginBottom:3 }}>{d.name}</div>
+          <div style={{ fontSize:12, color:"#718096", marginBottom:8 }}>Saved {new Date(d.savedAt).toLocaleString()}</div>
+          <div style={{ display:"flex", flexWrap:"wrap", gap:6, marginBottom:10 }}>
+            {d.form.eventType && <span style={{ background:"#ebf8ff", color:"#2b6cb0", padding:"2px 8px", borderRadius:10, fontSize:12, fontWeight:600 }}>{d.form.eventType}</span>}
+            {d.form.encounterType && <span style={{ background:"#f7fafc", color:"#4a5568", padding:"2px 8px", borderRadius:10, fontSize:12 }}>{d.form.encounterType}</span>}
+            {d.form.atcName && <span style={{ color:"#718096", fontSize:12 }}>ATC: {d.form.atcName}</span>}
+          </div>
+          <div style={{ display:"flex", gap:8 }}>
+            <button type="button" onClick={() => loadDraft(d)} style={{ flex:2, padding:"10px", background:"#1a365d", color:"#fff", border:"none", borderRadius:7, fontWeight:700, fontSize:14 }}>✏️ Load & Edit</button>
+            <button type="button" onClick={() => setExportDraft(d)} style={{ flex:1, padding:"10px", background:"#fff", color:"#2b6cb0", border:"1.5px solid #2b6cb0", borderRadius:7, fontWeight:600, fontSize:13 }}>📄 Text</button>
+            <button type="button" onClick={() => deleteDraft(d.id)} style={{ padding:"10px 12px", background:"#fff", color:"#c53030", border:"1.5px solid #fc8181", borderRadius:7, fontWeight:600, fontSize:13 }}>🗑️</button>
+          </div>
+        </div>
+      ))}
+    </div>
+  )}
+
+  {/* ── SETUP TAB ── */}
+  {tab === "setup" && <SetupTab webAppUrl={form.webAppUrl} setUrl={v => set("webAppUrl", v)} />}
+
+  {/* Picker */}
+  <PickerSheet picker={picker} current={picker ? form[picker] : ""} onSelect={onSelect} onClose={() => setPicker(null)} />
+
+  {/* Draft name modal */}
+  {draftModal && (
+    <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.5)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:2000, padding:16 }}>
+      <div style={{ background:"#fff", borderRadius:12, padding:20, maxWidth:400, width:"100%" }}>
+        <div style={{ fontWeight:700, fontSize:15, color:"#1a365d", marginBottom:10 }}>Save Draft</div>
+        <div style={{ fontSize:13, color:"#4a5568", marginBottom:12 }}>Name this draft or leave blank to auto-name.</div>
+        <input type="text" value={draftName} onChange={e => setDraftName(e.target.value)} placeholder={`${form.athleteName||"Unnamed"} – ${form.encounterDate||"No date"}`}
+          style={{ width:"100%", padding:"13px 12px", border:"1.5px solid #cbd5e0", borderRadius:8, fontSize:16, fontFamily:"inherit", marginBottom:14 }} />
+        <div style={{ display:"flex", gap:10 }}>
+          <button type="button" onClick={() => setDraftModal(false)} style={{ flex:1, padding:12, background:"#e2e8f0", color:"#4a5568", border:"none", borderRadius:8, fontWeight:600, fontSize:15 }}>Cancel</button>
+          <button type="button" onClick={saveDraftConfirm} style={{ flex:2, padding:12, background:"#2b6cb0", color:"#fff", border:"none", borderRadius:8, fontWeight:700, fontSize:15 }}>Save Draft</button>
+        </div>
+      </div>
+    </div>
+  )}
+
+  {/* Export modal */}
+  {exportDraft && (
+    <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.5)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:2000, padding:16 }}>
+      <div style={{ background:"#fff", borderRadius:12, padding:20, maxWidth:520, width:"100%", maxHeight:"80vh", display:"flex", flexDirection:"column" }}>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:12 }}>
+          <div style={{ fontWeight:700, fontSize:15, color:"#1a365d" }}>Draft: {exportDraft.name}</div>
+          <button type="button" onClick={() => setExportDraft(null)} style={{ background:"none", border:"none", fontSize:24, color:"#718096", cursor:"pointer" }}>×</button>
+        </div>
+        <div style={{ fontSize:13, color:"#4a5568", marginBottom:10 }}>Copy this text and save as a .json file for permanent backup.</div>
+        <button type="button" onClick={() => doCopy(JSON.stringify(exportDraft, null, 2))}
+          style={{ padding:"10px", background: copied ? "#276749" : "#2b6cb0", color:"#fff", border:"none", borderRadius:8, fontWeight:700, fontSize:14, marginBottom:10 }}>
+          {copied ? "✓ Copied!" : "Copy All"}
+        </button>
+        <pre style={{ background:"#f7fafc", border:"1px solid #e2e8f0", borderRadius:7, padding:12, fontSize:11, overflowY:"auto", whiteSpace:"pre-wrap", wordBreak:"break-word", flex:1 }}>{JSON.stringify(exportDraft, null, 2)}</pre>
+      </div>
+    </div>
+  )}
+</div>
+```
+
+);
+}
+
+function SetupTab({ webAppUrl, setUrl }) {
+const [copied, setCopied] = useState(false);
+const script = `function doGet(e) { try { var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet(); var p = e.parameter; if (!p.athleteName) { if (sheet.getLastRow() === 0) writeHeaders(sheet); return respond("ping"); } if (sheet.getLastRow() === 0) writeHeaders(sheet); sheet.appendRow([ p.timestamp||"",p.eventType||"",p.eventName||"",p.poolSite||"", p.encounterDate||"",p.encounterTime||"", p.athleteName||"",p.dob||"",p.age||"",p.gender||"",p.teamClub||"",p.usawpNum||"", p.encounterType||"",p.bodyRegion||"",p.side||"",p.mechanism||"",p.onset||"",p.subjective||"", p.assessment||"",p.severity||"",p.treatments||"",p.treatmentNotes||"", p.emsActivated||"",p.emsDetails||"",p.referralMade||"",p.referralTo||"", p.rtpStatus||"",p.parentContacted||"",p.coachContacted||"",p.additionalNotes||"", p.atcName||"",p.atcCredentials||"" ]); return respond("success"); } catch(err) { return respond("error: "+err.toString()); } } function writeHeaders(sheet) { sheet.appendRow(["Timestamp","Event Type","Event Name","Pool Site","Encounter Date","Encounter Time","Athlete Name","DOB","Age","Gender","Team/Club","USAWP #","Encounter Type","Body Region","Side","Mechanism","Onset","Subjective","Assessment","Severity","Treatments","Treatment Notes","EMS Activated","EMS Details","Referral Made","Referred To","RTP Status","Parent Contacted","Coach Contacted","Additional Notes","ATC Name","ATC Credentials"]); } function respond(msg) { return ContentService.createTextOutput(JSON.stringify({result:msg})).setMimeType(ContentService.MimeType.JSON); }`;
+
+const doCopy = () => {
+try { navigator.clipboard.writeText(script).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); }); } catch(e) {}
+};
+
+const steps = [
+[“Create a Google Sheet”, ‘Go to sheets.google.com, create a new spreadsheet, name it “USAWP Encounter Reports.”’],
+[“Open Apps Script”, “In the sheet click Extensions → Apps Script.”],
+[“Paste the Script”, “Delete any existing code and paste the script below.”],
+[“Save”, ‘Press Ctrl/Cmd+S. Name the project “USAWP Report Logger.”’],
+[“Deploy as Web App”, “Click Deploy → New deployment. Type: Web App. Execute as: Me. Who has access: Anyone. Click Deploy.”],
+[“Authorize”, “Click Authorize access, sign in with your Google account, allow permissions.”],
+[“Copy the Web App URL”, “Copy the URL shown (ends in /exec).”],
+[“Paste URL in Delivery Settings”, “Paste it into the Delivery Settings field on the Report tab.”],
+];
+
+return (
+<div>
+<div style={{ background:”#1a365d”, borderRadius:8, padding:12, marginBottom:14 }}>
+<div style={{ color:”#fff”, fontWeight:700, fontSize:15 }}>Google Sheet Setup</div>
+<div style={{ color:”#90cdf4”, fontSize:12, marginTop:2 }}>One-time setup — about 5 minutes</div>
+</div>
+{steps.map(([title, body], i) => (
+<div key={i} style={{ display:“flex”, gap:12, marginBottom:14 }}>
+<div style={{ minWidth:28, height:28, borderRadius:“50%”, background:”#2b6cb0”, color:”#fff”, display:“flex”, alignItems:“center”, justifyContent:“center”, fontWeight:700, fontSize:13, flexShrink:0 }}>{i+1}</div>
+<div><div style={{ fontWeight:700, fontSize:14, color:”#1a365d”, marginBottom:2 }}>{title}</div><div style={{ fontSize:13, color:”#4a5568”, lineHeight:1.5 }}>{body}</div></div>
+</div>
+))}
+<div style={{ background:”#1a202c”, borderRadius:8, padding:14, marginBottom:14 }}>
+<div style={{ display:“flex”, justifyContent:“space-between”, alignItems:“center”, marginBottom:8 }}>
+<span style={{ color:”#90cdf4”, fontSize:12, fontWeight:700 }}>APPS SCRIPT CODE</span>
+<button type=“button” onClick={doCopy} style={{ padding:“6px 14px”, background: copied ? “#276749” : “#2b6cb0”, color:”#fff”, border:“none”, borderRadius:6, fontSize:13, fontWeight:700 }}>{copied ? “✓ Copied!” : “Copy Code”}</button>
+</div>
+<pre style={{ color:”#e2e8f0”, fontSize:11, whiteSpace:“pre-wrap”, wordBreak:“break-word”, lineHeight:1.5, margin:0 }}>{script}</pre>
+</div>
+<div style={{ background:”#f0fff4”, border:“1px solid #9ae6b4”, borderRadius:8, padding:12, marginBottom:14 }}>
+<div style={{ fontWeight:700, color:”#276749”, fontSize:13, marginBottom:6 }}>✅ Your Web App URL</div>
+<input type=“url” value={webAppUrl} onChange={e => setUrl(e.target.value)} placeholder=“https://script.google.com/macros/s/…/exec”
+style={{ width:“100%”, padding:“13px 12px”, border:“1.5px solid #cbd5e0”, borderRadius:8, fontSize:16, fontFamily:“inherit” }} />
+</div>
+<div style={{ background:”#fffff0”, border:“1px solid #f6e05e”, borderRadius:8, padding:12, fontSize:13, color:”#744210” }}>
+<b>⚠️ Note:</b> If you re-deploy the script you get a new URL. Update it in Delivery Settings and notify contractors.
+</div>
+</div>
+);
+}
