@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -92,7 +91,6 @@ pre.cb{background:#f7fafc;border:1px solid #e2e8f0;border-radius:7px;padding:12p
 </div>
 
 <!-- ═══ REPORT PAGE ═══ -->
-
 <div id="pg-report" class="pg on">
 <div id="doneView" style="display:none"></div>
 <div id="mainForm">
@@ -262,7 +260,6 @@ pre.cb{background:#f7fafc;border:1px solid #e2e8f0;border-radius:7px;padding:12p
 </div>
 
 <!-- ═══ DRAFTS PAGE ═══ -->
-
 <div id="pg-drafts" class="pg">
   <div style="background:#1a365d;border-radius:8px;padding:12px;margin-bottom:14px">
     <div style="color:#fff;font-weight:700;font-size:15px">Saved Drafts</div>
@@ -275,7 +272,6 @@ pre.cb{background:#f7fafc;border:1px solid #e2e8f0;border-radius:7px;padding:12p
 </div>
 
 <!-- ═══ SETUP PAGE ═══ -->
-
 <div id="pg-setup" class="pg">
   <div style="background:#1a365d;border-radius:8px;padding:12px;margin-bottom:14px">
     <div style="color:#fff;font-weight:700;font-size:15px">Google Sheet Setup</div>
@@ -306,7 +302,6 @@ pre.cb{background:#f7fafc;border:1px solid #e2e8f0;border-radius:7px;padding:12p
 </div><!-- /wrap -->
 
 <!-- PICKER -->
-
 <div class="po" id="pickerOv" onclick="if(event.target===this)cp()">
   <div class="ps">
     <div class="ph"><div class="pt" id="pickerTitle">Select</div><button type="button" class="pd" onclick="cp()">Done</button></div>
@@ -315,7 +310,6 @@ pre.cb{background:#f7fafc;border:1px solid #e2e8f0;border-radius:7px;padding:12p
 </div>
 
 <!-- DRAFT MODAL -->
-
 <div class="mo" id="draftMo">
   <div class="mc">
     <div class="mh"><div class="mt">Save Draft</div><button type="button" class="mx" onclick="cm('draftMo')">×</button></div>
@@ -331,7 +325,6 @@ pre.cb{background:#f7fafc;border:1px solid #e2e8f0;border-radius:7px;padding:12p
 </div>
 
 <!-- EXPORT MODAL -->
-
 <div class="mo" id="exportMo">
   <div class="mc">
     <div class="mh"><div class="mt" id="exportTitle">Draft</div><button type="button" class="mx" onclick="cm('exportMo')">×</button></div>
@@ -391,19 +384,13 @@ var SCRIPT = [
   '  .setMimeType(ContentService.MimeType.JSON);}'
 ].join('\n');
 
-try {
-  document.getElementById('scriptPre').textContent = SCRIPT;
-  renderDrafts();
-  document.getElementById('jsTest').textContent = '✅ JavaScript working — app ready!';
-  document.getElementById('jsTest').style.background = '#f0fff4';
-  document.getElementById('jsTest').style.color = '#276749';
-  document.getElementById('jsTest').style.border = '1px solid #9ae6b4';
-} catch(err) {
-  document.getElementById('jsTest').textContent = '❌ Error: ' + err.message;
-  document.getElementById('jsTest').style.background = '#fff5f5';
-  document.getElementById('jsTest').style.color = '#c53030';
-  document.getElementById('jsTest').style.border = '1px solid #fc8181';
-}
+document.getElementById('jsTest').textContent = 'STEP 1 OK';
+try { document.getElementById('scriptPre').textContent = SCRIPT; } catch(e1) { document.getElementById('jsTest').textContent = 'FAILED scriptPre: ' + e1.message; }
+document.getElementById('jsTest').textContent = 'STEP 2 OK';
+try { renderDrafts(); } catch(e2) { document.getElementById('jsTest').textContent = 'FAILED renderDrafts: ' + e2.message; }
+document.getElementById('jsTest').textContent = '✅ ALL DONE — app ready!';
+document.getElementById('jsTest').style.background = '#f0fff4';
+document.getElementById('jsTest').style.color = '#276749';
 
 // Tabs
 function showPg(name, btn) {
@@ -547,126 +534,121 @@ function showDone(f){
     +'<div style="font-weight:700;font-size:14px;color:#1a365d;margin-bottom:10px">Step 2 \u2014 Copy report text</div>'
     +'<button type="button" id="cpRptBtn" class="btn bb" style="width:100%;margin-bottom:10px;border-radius:8px" onclick="cpRpt()">Copy Report Text</button>'
     +'<pre class="cb">'+e(rpt)+'</pre>'
-
-```
-+'<div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px;margin-top:14px;margin-bottom:14px"><div style="font-weight:700;font-size:13px;color:#1a365d;margin-bottom:10px">Quick Summary</div>'+rows+'</div>'
-+'<button type="button" class="btn bp" style="width:100%" onclick="resetForm()">+ New Encounter Report</button>';
-```
-
-window.scrollTo({top:0,behavior:‘smooth’});
+    +'<div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px;margin-top:14px;margin-bottom:14px"><div style="font-weight:700;font-size:13px;color:#1a365d;margin-bottom:10px">Quick Summary</div>'+rows+'</div>'
+    +'<button type="button" class="btn bp" style="width:100%" onclick="resetForm()">+ New Encounter Report</button>';
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
-function cpRpt(){doCp(window._rpt||’’,document.getElementById(‘cpRptBtn’),‘Copy Report Text’);}
+function cpRpt(){doCp(window._rpt||'',document.getElementById('cpRptBtn'),'Copy Report Text');}
 
 function resetForm(){
-document.getElementById(‘doneView’).style.display=‘none’;
-document.getElementById(‘mainForm’).style.display=‘block’;
-document.querySelectorAll(’#mainForm input:not([readonly]):not([type=file])’).forEach(function(el){el.value=’’;});
-document.querySelectorAll(’#mainForm textarea’).forEach(function(el){el.value=’’;});
-document.querySelectorAll(’.pill’).forEach(function(p){p.classList.remove(‘on’);});
-[‘g’,‘a’,‘r’].forEach(function(c){document.getElementById(‘svbtn-’+c).className=‘svbtn’;});
-document.getElementById(‘severity’).value=’’;
-document.querySelectorAll(’.sb’).forEach(function(b){b.classList.remove(‘v’);});
-[‘eventType’,‘gender’,‘bodyRegion’,‘side’,‘onset’,‘mechanism’,‘emsActivated’,‘referralMade’,‘rtpStatus’,‘parentContacted’,‘coachContacted’,‘coachAdult’].forEach(function(k){var s=document.getElementById(‘sv-’+k);if(s)s.textContent=‘Select\u2026’;});
-document.getElementById(‘ageDisp’).value=’’;
-document.getElementById(‘minorBox’).style.display=‘none’;
-document.getElementById(‘coachAdultRow’).style.display=‘block’;
-document.getElementById(‘emsDF’).style.display=‘none’;
-document.getElementById(‘refDF’).style.display=‘none’;
-document.getElementById(‘formErr’).style.display=‘none’;
-selTx=[];
-window.scrollTo({top:0,behavior:‘smooth’});
+  document.getElementById('doneView').style.display='none';
+  document.getElementById('mainForm').style.display='block';
+  document.querySelectorAll('#mainForm input:not([readonly]):not([type=file])').forEach(function(el){el.value='';});
+  document.querySelectorAll('#mainForm textarea').forEach(function(el){el.value='';});
+  document.querySelectorAll('.pill').forEach(function(p){p.classList.remove('on');});
+  ['g','a','r'].forEach(function(c){document.getElementById('svbtn-'+c).className='svbtn';});
+  document.getElementById('severity').value='';
+  document.querySelectorAll('.sb').forEach(function(b){b.classList.remove('v');});
+  ['eventType','gender','bodyRegion','side','onset','mechanism','emsActivated','referralMade','rtpStatus','parentContacted','coachContacted','coachAdult'].forEach(function(k){var s=document.getElementById('sv-'+k);if(s)s.textContent='Select\u2026';});
+  document.getElementById('ageDisp').value='';
+  document.getElementById('minorBox').style.display='none';
+  document.getElementById('coachAdultRow').style.display='block';
+  document.getElementById('emsDF').style.display='none';
+  document.getElementById('refDF').style.display='none';
+  document.getElementById('formErr').style.display='none';
+  selTx=[];
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
 // Drafts
-function getDrafts(){try{return JSON.parse(localStorage.getItem(DK)||’[]’);}catch(x){return[];}}
+function getDrafts(){try{return JSON.parse(localStorage.getItem(DK)||'[]');}catch(x){return[];}}
 function putDrafts(d){try{localStorage.setItem(DK,JSON.stringify(d));}catch(x){}}
 
-function saveDraft(){document.getElementById(‘draftName’).value=’’;om(‘draftMo’);}
+function saveDraft(){document.getElementById('draftName').value='';om('draftMo');}
 
 function confirmDraft(){
-var f=collect();
-var nm=document.getElementById(‘draftName’).value.trim()||((f.athleteName||‘Unnamed’)+’ \u2013 ’+(f.encounterDate||‘No date’));
-var d={id:Date.now(),name:nm,savedAt:new Date().toISOString(),form:f,tx:selTx.slice()};
-putDrafts([d].concat(getDrafts()));
-cm(‘draftMo’);
-var msg=document.getElementById(‘draftMsg’);msg.textContent=‘✅ Draft saved’;msg.style.display=‘block’;
-setTimeout(function(){msg.style.display=‘none’;},2500);
-updDraftCount();
+  var f=collect();
+  var nm=document.getElementById('draftName').value.trim()||((f.athleteName||'Unnamed')+' \u2013 '+(f.encounterDate||'No date'));
+  var d={id:Date.now(),name:nm,savedAt:new Date().toISOString(),form:f,tx:selTx.slice()};
+  putDrafts([d].concat(getDrafts()));
+  cm('draftMo');
+  var msg=document.getElementById('draftMsg');msg.textContent='✅ Draft saved';msg.style.display='block';
+  setTimeout(function(){msg.style.display='none';},2500);
+  updDraftCount();
 }
 
 function loadDraft(id){
-var draft=getDrafts().filter(function(d){return d.id===id;})[0];if(!draft)return;
-var f=draft.form;
-[‘webAppUrl’,‘notifyEmail’,‘eventType’,‘eventName’,‘poolSite’,‘encounterDate’,‘encounterTime’,‘athleteName’,‘dob’,‘gender’,‘teamClub’,‘usawpNum’,‘encounterType’,‘bodyRegion’,‘side’,‘onset’,‘mechanism’,‘subjective’,‘assessment’,‘severity’,‘treatmentNotes’,‘emsActivated’,‘emsDetails’,‘referralMade’,‘referralTo’,‘rtpStatus’,‘parentContacted’,‘coachContacted’,‘additionalNotes’,‘atcName’,‘atcCredentials’].forEach(function(k){var el=document.getElementById(k);if(el&&f[k]!==undefined)el.value=f[k];});
-var ca=document.getElementById(‘coachAdult’);if(ca)ca.value=f.coachContacted||’’;
-// Restore picker labels
-[‘eventType’,‘gender’,‘bodyRegion’,‘side’,‘onset’,‘mechanism’,‘emsActivated’,‘referralMade’,‘rtpStatus’,‘parentContacted’,‘coachContacted’,‘coachAdult’].forEach(function(k){
-var v=(document.getElementById(k)||{}).value||’’;
-if(v){var s=document.getElementById(‘sv-’+k);if(s)s.textContent=v;var b=document.getElementById(‘sb-’+k);if(b)b.classList.add(‘v’);}
-});
-if(f.severity){var cls=f.severity.indexOf(‘Green’)>-1?‘g’:f.severity.indexOf(‘Amber’)>-1?‘a’:‘r’;setSev(f.severity,cls);}
-selTx=(draft.tx||[]).slice();
-document.querySelectorAll(’#txPills .pill’).forEach(function(p){p.classList.toggle(‘on’,selTx.indexOf(p.textContent)>-1);});
-document.querySelectorAll(’.pills’).forEach(function(group){
-group.querySelectorAll(’.pill’).forEach(function(p){
-if(p.textContent===f.encounterType&&group.id!==‘txPills’)p.classList.add(‘on’);
-});
-});
-updAge();
-document.getElementById(‘emsDF’).style.display=f.emsActivated===‘Yes’?‘block’:‘none’;
-document.getElementById(‘refDF’).style.display=f.referralMade===‘Yes’?‘block’:‘none’;
-showPg(‘report’,document.querySelectorAll(’.tab’)[0]);
-window.scrollTo({top:0,behavior:‘smooth’});
+  var draft=getDrafts().filter(function(d){return d.id===id;})[0];if(!draft)return;
+  var f=draft.form;
+  ['webAppUrl','notifyEmail','eventType','eventName','poolSite','encounterDate','encounterTime','athleteName','dob','gender','teamClub','usawpNum','encounterType','bodyRegion','side','onset','mechanism','subjective','assessment','severity','treatmentNotes','emsActivated','emsDetails','referralMade','referralTo','rtpStatus','parentContacted','coachContacted','additionalNotes','atcName','atcCredentials'].forEach(function(k){var el=document.getElementById(k);if(el&&f[k]!==undefined)el.value=f[k];});
+  var ca=document.getElementById('coachAdult');if(ca)ca.value=f.coachContacted||'';
+  // Restore picker labels
+  ['eventType','gender','bodyRegion','side','onset','mechanism','emsActivated','referralMade','rtpStatus','parentContacted','coachContacted','coachAdult'].forEach(function(k){
+    var v=(document.getElementById(k)||{}).value||'';
+    if(v){var s=document.getElementById('sv-'+k);if(s)s.textContent=v;var b=document.getElementById('sb-'+k);if(b)b.classList.add('v');}
+  });
+  if(f.severity){var cls=f.severity.indexOf('Green')>-1?'g':f.severity.indexOf('Amber')>-1?'a':'r';setSev(f.severity,cls);}
+  selTx=(draft.tx||[]).slice();
+  document.querySelectorAll('#txPills .pill').forEach(function(p){p.classList.toggle('on',selTx.indexOf(p.textContent)>-1);});
+  document.querySelectorAll('.pills').forEach(function(group){
+    group.querySelectorAll('.pill').forEach(function(p){
+      if(p.textContent===f.encounterType&&group.id!=='txPills')p.classList.add('on');
+    });
+  });
+  updAge();
+  document.getElementById('emsDF').style.display=f.emsActivated==='Yes'?'block':'none';
+  document.getElementById('refDF').style.display=f.referralMade==='Yes'?'block':'none';
+  showPg('report',document.querySelectorAll('.tab')[0]);
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
 function delDraft(id){putDrafts(getDrafts().filter(function(d){return d.id!==id;}));renderDrafts();updDraftCount();}
 
 function renderDrafts(){
-var drafts=getDrafts();updDraftCount();
-var c=document.getElementById(‘draftList’);if(!c)return;
-if(!drafts.length){c.innerHTML=’<div class="es">No drafts yet.<br><span style="font-size:12px">Use “Save Draft” on the Report tab.</span></div>’;return;}
-c.innerHTML=drafts.map(function(d){
-return ‘<div class="dc"><div style="font-weight:700;font-size:14px;color:#1a365d;margin-bottom:3px">’+e(d.name)+’</div><div style="font-size:12px;color:#718096;margin-bottom:8px">’+new Date(d.savedAt).toLocaleString()+’</div>’
-+’<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">’
-+(d.form.eventType?’<span style="background:#ebf8ff;color:#2b6cb0;padding:3px 8px;border-radius:10px;font-size:12px;font-weight:600">’+e(d.form.eventType)+’</span>’:’’)
-+(d.form.encounterType?’<span style="background:#f7fafc;color:#4a5568;padding:3px 8px;border-radius:10px;font-size:12px">’+e(d.form.encounterType)+’</span>’:’’)
-+(d.form.atcName?’<span style="color:#718096;font-size:12px">ATC: ‘+e(d.form.atcName)+’</span>’:’’)
-+’</div><div class="brow">’
-+’<button type="button" class="btn bp" style="flex:2;padding:10px;font-size:14px" onclick="loadDraft('+d.id+')">✏️ Load & Edit</button>’
-+’<button type="button" class="btn bo" style="flex:1;padding:10px;font-size:13px" onclick="showExport('+d.id+')">📄 Text</button>’
-+’<button type="button" class="btn bd" style="padding:10px;font-size:13px" onclick="delDraft('+d.id+')">🗑️</button>’
-+’</div></div>’;
-}).join(’’);
+  var drafts=getDrafts();updDraftCount();
+  var c=document.getElementById('draftList');if(!c)return;
+  if(!drafts.length){c.innerHTML='<div class="es">No drafts yet.<br><span style="font-size:12px">Use "Save Draft" on the Report tab.</span></div>';return;}
+  c.innerHTML=drafts.map(function(d){
+    return '<div class="dc"><div style="font-weight:700;font-size:14px;color:#1a365d;margin-bottom:3px">'+e(d.name)+'</div><div style="font-size:12px;color:#718096;margin-bottom:8px">'+new Date(d.savedAt).toLocaleString()+'</div>'
+      +'<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">'
+      +(d.form.eventType?'<span style="background:#ebf8ff;color:#2b6cb0;padding:3px 8px;border-radius:10px;font-size:12px;font-weight:600">'+e(d.form.eventType)+'</span>':'')
+      +(d.form.encounterType?'<span style="background:#f7fafc;color:#4a5568;padding:3px 8px;border-radius:10px;font-size:12px">'+e(d.form.encounterType)+'</span>':'')
+      +(d.form.atcName?'<span style="color:#718096;font-size:12px">ATC: '+e(d.form.atcName)+'</span>':'')
+      +'</div><div class="brow">'
+      +'<button type="button" class="btn bp" style="flex:2;padding:10px;font-size:14px" onclick="loadDraft('+d.id+')">✏️ Load & Edit</button>'
+      +'<button type="button" class="btn bo" style="flex:1;padding:10px;font-size:13px" onclick="showExport('+d.id+')">📄 Text</button>'
+      +'<button type="button" class="btn bd" style="padding:10px;font-size:13px" onclick="delDraft('+d.id+')">🗑️</button>'
+      +'</div></div>';
+  }).join('');
 }
 
-function updDraftCount(){var n=getDrafts().length;var b=document.getElementById(‘draftTabBtn’);if(b)b.textContent=‘📁 Drafts’+(n>0?’ (’+n+’)’:””);}
+function updDraftCount(){var n=getDrafts().length;var b=document.getElementById('draftTabBtn');if(b)b.textContent='📁 Drafts'+(n>0?' ('+n+')':"");}
 
 function showExport(id){
-var d=getDrafts().filter(function(x){return x.id===id;})[0];if(!d)return;
-document.getElementById(‘exportTitle’).textContent=’Draft: ’+d.name;
-document.getElementById(‘exportPre’).textContent=JSON.stringify(d,null,2);
-om(‘exportMo’);
+  var d=getDrafts().filter(function(x){return x.id===id;})[0];if(!d)return;
+  document.getElementById('exportTitle').textContent='Draft: '+d.name;
+  document.getElementById('exportPre').textContent=JSON.stringify(d,null,2);
+  om('exportMo');
 }
-function copyExport(){doCp(document.getElementById(‘exportPre’).textContent,null,null);}
+function copyExport(){doCp(document.getElementById('exportPre').textContent,null,null);}
 
 function importDraft(ev){
-var file=ev.target.files[0];if(!file)return;
-var reader=new FileReader();
-reader.onload=function(e2){try{var d=JSON.parse(e2.target.result);if(d.form){putDrafts([Object.assign({},d,{id:Date.now()})].concat(getDrafts()));renderDrafts();alert(‘Draft imported!’);}}catch(x){alert(‘Invalid file.’);}};
-reader.readAsText(file);ev.target.value=’’;
+  var file=ev.target.files[0];if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(e2){try{var d=JSON.parse(e2.target.result);if(d.form){putDrafts([Object.assign({},d,{id:Date.now()})].concat(getDrafts()));renderDrafts();alert('Draft imported!');}}catch(x){alert('Invalid file.');}};
+  reader.readAsText(file);ev.target.value='';
 }
 
-function copyScript(){doCp(SCRIPT,null,null);alert(‘Script copied!’);}
+function copyScript(){doCp(SCRIPT,null,null);alert('Script copied!');}
 
-function om(id){document.getElementById(id).classList.add(‘on’);document.body.style.overflow=‘hidden’;}
-function cm(id){document.getElementById(id).classList.remove(‘on’);document.body.style.overflow=’’;}
-function e(t){return String(t||’’).replace(/&/g,’&’).replace(/</g,’<’).replace(/>/g,’>’);}
+function om(id){document.getElementById(id).classList.add('on');document.body.style.overflow='hidden';}
+function cm(id){document.getElementById(id).classList.remove('on');document.body.style.overflow='';}
+function e(t){return String(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function doCp(txt,btn,lbl){
-try{navigator.clipboard.writeText(txt).then(function(){if(btn){btn.textContent=‘✓ Copied!’;setTimeout(function(){btn.textContent=lbl;},2000);}});}
-catch(x){var ta=document.createElement(‘textarea’);ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand(‘copy’);document.body.removeChild(ta);if(btn){btn.textContent=‘✓ Copied!’;setTimeout(function(){btn.textContent=lbl;},2000);}}
+  try{navigator.clipboard.writeText(txt).then(function(){if(btn){btn.textContent='✓ Copied!';setTimeout(function(){btn.textContent=lbl;},2000);}});}
+  catch(x){var ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);if(btn){btn.textContent='✓ Copied!';setTimeout(function(){btn.textContent=lbl;},2000);}}
 }
 </script>
-
 </body>
 </html>
